@@ -29,13 +29,13 @@ public class BombermanGame extends Application {
     //Các đối tượng tĩnh: grass, wall
     private List<Entity> stillObjects = new ArrayList<>();
 
-
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
 
     @Override
     public void start(Stage stage) {
+
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
