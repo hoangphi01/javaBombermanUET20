@@ -21,28 +21,41 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 20;
     public static final int HEIGHT = 11;
 
+    private static AnimationTimer timer;
+    private static Group root = new Group();
+    private static gameBackground bg = new gameBackground();
+
     private GraphicsContext gc;
     private Canvas canvas;
     //Các đối tượng động
-    private List<Entity> entities = new ArrayList<>();
+    private static List<Entity> entities = new ArrayList<>();
 
     //Các đối tượng tĩnh: grass, wall
-    private List<Entity> stillObjects = new ArrayList<>();
+    private static List<Entity> stillObjects = new ArrayList<>();
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
 
+    public static void startGame() {
+        root.getChildren().remove(bg);
+        bg = null;
+
+        createMap();
+        timer.start();
+    }
+
     @Override
     public void start(Stage stage) {
+
+        stage.setTitle("Bomberman 2020");
 
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
-        Group root = new Group();
-        root.getChildren().add(canvas);
+        root.getChildren().addAll(canvas, bg);
 
         // Tao scene
         Scene scene = new Scene(root);
@@ -51,16 +64,13 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
         stage.show();
 
-        AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 render();
                 update();
             }
         };
-        timer.start();
-
-        createMap();
 
         // Khởi tạo vị trí của bomber nằm ở ô x, y trong map và hướng nhân vật quay sang trái
         Entity bomberman = new Bomber(1, 1, Sprite.player_left.getFxImage());
@@ -69,7 +79,7 @@ public class BombermanGame extends Application {
         entities.add(bomberman);
     }
 
-    public void createMap() {
+    public static void createMap() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
