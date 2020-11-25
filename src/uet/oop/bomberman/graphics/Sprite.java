@@ -12,7 +12,7 @@ public class Sprite {
 
     public static final int DEFAULT_SIZE = 40; //size của 1 ô hình ảnh
     public static final int SCALED_SIZE = DEFAULT_SIZE; //scale hình gốc
-    private static final int TRANSPARENT_COLOR = 0xffff00ff; // color keying
+    private static final int TRANSPARENT_COLOR = 0xffffffff; // color keying
     public final int SIZE; // = DEFAULT_SIZE
     private int _x, _y;
     public int[] _pixels; //
@@ -34,10 +34,9 @@ public class Sprite {
     |--------------------------------------------------------------------------
      */
     public static Sprite[][] grass = new Sprite[21][21];
-    public int cnti = 0;
-    public int cntj = 0;
     public static Sprite brick = new Sprite(DEFAULT_SIZE, 7, 0, SpriteSheet.tiles, 40, 40);
     public static Sprite wall = new Sprite(DEFAULT_SIZE, 14, 15, SpriteSheet.tiles, 40, 40);
+    //public static Sprite bomb = new Sprite(DEFAULT_SIZE, 7, 27, SpriteSheet.tiles, 40, 40);
     public static Sprite test = new Sprite();
     public static Sprite portal = new Sprite(DEFAULT_SIZE, 4, 0, SpriteSheet.tiles, 14, 14);
 
@@ -48,22 +47,28 @@ public class Sprite {
      */
 
     //Khởi tạo vị trí xuất hiện của player
-    public static Sprite player_up = new Sprite(DEFAULT_SIZE, 0, 0, SpriteSheet.tiles, 12, 16);
-    public static Sprite player_down = new Sprite(DEFAULT_SIZE, 2, 0, SpriteSheet.tiles, 12, 15);
-    public static Sprite player_left = new Sprite(DEFAULT_SIZE, 16, 16, SpriteSheet.tiles, 10, 15);
-    public static Sprite player_right = new Sprite(DEFAULT_SIZE, 1, 0, SpriteSheet.tiles, 10, 16);
+    //public static Sprite[4] player_up;
+    public static Sprite player_up = new Sprite(DEFAULT_SIZE, 16, 15, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_down = new Sprite(DEFAULT_SIZE, 16, 16, SpriteSheet.tiles, 12, 15);
+    public static Sprite player_right = new Sprite(DEFAULT_SIZE, 16, 17, SpriteSheet.tiles, 10, 16);
+    public static Sprite player_left = new Sprite(DEFAULT_SIZE, 16, 18, SpriteSheet.tiles, 10, 15);
 
-    public static Sprite player_up_1 = new Sprite(DEFAULT_SIZE, 0, 1, SpriteSheet.tiles, 12, 16);
-    public static Sprite player_up_2 = new Sprite(DEFAULT_SIZE, 0, 2, SpriteSheet.tiles, 12, 15);
 
-    public static Sprite player_down_1 = new Sprite(DEFAULT_SIZE, 2, 1, SpriteSheet.tiles, 12, 15);
-    public static Sprite player_down_2 = new Sprite(DEFAULT_SIZE, 2, 2, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_up_1 = new Sprite(DEFAULT_SIZE, 17, 15, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_up_2 = new Sprite(DEFAULT_SIZE, 18, 15, SpriteSheet.tiles, 12, 15);
+    public static Sprite player_up_3 = new Sprite(DEFAULT_SIZE, 19, 15, SpriteSheet.tiles, 12, 15);
 
-    public static Sprite player_left_1 = new Sprite(DEFAULT_SIZE, 3, 1, SpriteSheet.tiles, 11, 16);
-    public static Sprite player_left_2 = new Sprite(DEFAULT_SIZE, 3, 2, SpriteSheet.tiles, 12 ,16);
+    public static Sprite player_down_1 = new Sprite(DEFAULT_SIZE, 17, 16, SpriteSheet.tiles, 12, 15);
+    public static Sprite player_down_2 = new Sprite(DEFAULT_SIZE, 18, 16, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_down_3 = new Sprite(DEFAULT_SIZE, 19, 16, SpriteSheet.tiles, 12, 16);
 
-    public static Sprite player_right_1 = new Sprite(DEFAULT_SIZE, 1, 1, SpriteSheet.tiles, 11, 16);
-    public static Sprite player_right_2 = new Sprite(DEFAULT_SIZE, 1, 2, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_left_1 = new Sprite(DEFAULT_SIZE, 17, 18, SpriteSheet.tiles, 11, 16);
+    public static Sprite player_left_2 = new Sprite(DEFAULT_SIZE, 18, 18, SpriteSheet.tiles, 12 ,16);
+    public static Sprite player_left_3 = new Sprite(DEFAULT_SIZE, 19, 18, SpriteSheet.tiles, 12 ,16);
+
+    public static Sprite player_right_1 = new Sprite(DEFAULT_SIZE, 17, 17, SpriteSheet.tiles, 11, 16);
+    public static Sprite player_right_2 = new Sprite(DEFAULT_SIZE, 18, 17, SpriteSheet.tiles, 12, 16);
+    public static Sprite player_right_3 = new Sprite(DEFAULT_SIZE, 19, 17, SpriteSheet.tiles, 12, 16);
 
     public static Sprite player_dead1 = new Sprite(DEFAULT_SIZE, 4, 2, SpriteSheet.tiles, 14, 16);
     public static Sprite player_dead2 = new Sprite(DEFAULT_SIZE, 5, 2, SpriteSheet.tiles, 13, 15);
@@ -75,13 +80,15 @@ public class Sprite {
     |--------------------------------------------------------------------------
      */
     //BALLOM
-    public static Sprite balloom_left1 = new Sprite(DEFAULT_SIZE, 9, 0, SpriteSheet.tiles, 16, 16);
-    public static Sprite balloom_left2 = new Sprite(DEFAULT_SIZE, 9, 1, SpriteSheet.tiles, 16, 16);
-    public static Sprite balloom_left3 = new Sprite(DEFAULT_SIZE, 9, 2, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_left1 = new Sprite(DEFAULT_SIZE, 4, 14, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_left2 = new Sprite(DEFAULT_SIZE, 5, 14, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_left3 = new Sprite(DEFAULT_SIZE, 6, 14, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_left4 = new Sprite(DEFAULT_SIZE, 7, 14, SpriteSheet.tiles, 16, 16);
 
-    public static Sprite balloom_right1 = new Sprite(DEFAULT_SIZE, 10, 0, SpriteSheet.tiles, 16, 16);
-    public static Sprite balloom_right2 = new Sprite(DEFAULT_SIZE, 10, 1, SpriteSheet.tiles, 16, 16);
-    public static Sprite balloom_right3 = new Sprite(DEFAULT_SIZE, 10, 2, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_right1 = new Sprite(DEFAULT_SIZE, 4, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_right2 = new Sprite(DEFAULT_SIZE, 5, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_right3 = new Sprite(DEFAULT_SIZE, 6, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite balloom_right4 = new Sprite(DEFAULT_SIZE, 7, 15, SpriteSheet.tiles, 16, 16);
 
     public static Sprite balloom_dead = new Sprite(DEFAULT_SIZE, 9, 3, SpriteSheet.tiles, 16, 16);
 
@@ -139,9 +146,10 @@ public class Sprite {
     | Bomb Sprites
     |--------------------------------------------------------------------------
      */
-    public static Sprite bomb = new Sprite(DEFAULT_SIZE, 0, 3, SpriteSheet.tiles, 15, 15);
-    public static Sprite bomb_1 = new Sprite(DEFAULT_SIZE, 1, 3, SpriteSheet.tiles, 13, 15);
-    public static Sprite bomb_2 = new Sprite(DEFAULT_SIZE, 2, 3, SpriteSheet.tiles, 12, 14);
+    public static Sprite bomb = new Sprite(DEFAULT_SIZE, 7, 19, SpriteSheet.tiles, 15, 15);
+    public static Sprite bomb_1 = new Sprite(DEFAULT_SIZE, 8, 19, SpriteSheet.tiles, 13, 15);
+    public static Sprite bomb_2 = new Sprite(DEFAULT_SIZE, 9, 19, SpriteSheet.tiles, 12, 14);
+    public static Sprite bomb_3 = new Sprite(DEFAULT_SIZE, 10, 19, SpriteSheet.tiles, 12, 14);
 
     /*
     |--------------------------------------------------------------------------

@@ -14,7 +14,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import uet.oop.bomberman.BackgroundItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -91,8 +90,8 @@ public class gameBackground extends Pane {
 
     public gameBackground() {
         addBackground();
-        addLine(50,100);
-        addMenu(50,100);
+        addLine(75,100);
+        addMenu(80,100);
         startAnimation();
     }
 

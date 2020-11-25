@@ -9,7 +9,7 @@ public class Wall extends Entity {
     }
 
     @Override
-    public void update() {
+    public void update(int x, int y, Image img) {
 
     }
 }
