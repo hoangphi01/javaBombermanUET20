@@ -9,9 +9,7 @@ import javafx.scene.paint.Color;
 public class Bomber extends MovingEntity {
     int cnt = 0;
     public Bomber(int x, int y, Image img) {
-
         super( x, y, img);
-        System.out.println(x + " " + y);
     }
 
     @Override

@@ -3,8 +3,12 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.Map;
+
+import static java.lang.Math.abs;
 
 public abstract class MovingEntity extends Entity {
+    Map map = new Map();
     public  MovingEntity() {
 
     }
@@ -15,9 +19,64 @@ public abstract class MovingEntity extends Entity {
     }
 
     public boolean check(int addX, int addY) {
-        if (this.x + addX >= 40 && this.x + addX <= 720 && this.y + addY >= 120 && this.y + addY <= 440)
+        if (this.x % 40 == 0 && this.y % 40 == 0) {
+            if (addX == 0 && addY == 5) {
+                if (map.get(this.x / 40, this.y / 40 + 1) != '#')
+                    return true;
+                return false;
+            }
+            else if (addX == 0 && addY == -5) {
+                if (map.get(this.x / 40, this.y / 40 - 1) != '#')
+                    return true;
+                return false;
+            }
+            else if (addX == 5 && addY == 0) {
+                if (map.get(this.x / 40 + 1, this.y / 40) != '#')
+                    return true;
+                return false;
+            }
+            else {
+                if (map.get(this.x / 40 - 1, this.y / 40) != '#')
+                    return true;
+                return false;
+            }
+        }
+        else if (this.x % 40 != 0 && this.y % 40 == 0) {
+            if (addX == 0 && addY == 5) {
+                if (map.get(this.x / 40, this.y / 40 + 1) != '#' && map.get(this.x / 40 + 1, this.y / 40 + 1) != '#')
+                    return true;
+                return false;
+            }
+            else if (addX == 0 && addY == -5) {
+                if (map.get(this.x / 40, this.y / 40 - 1) != '#' && map.get(this.x / 40 + 1, this.y / 40 - 1) != '#')
+                    return true;
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else if (this.x % 40 == 0 && this.y % 40 != 0) {
+            if (addX == 0 && addY == 5) {
+                return true;
+            }
+            else if (addX == 0 && addY == -5) {
+                return true;
+            }
+            else if (addX == 5 && addY == 0) {
+                if (map.get(this.x / 40 + 1, this.y / 40) != '#' && map.get(this.x / 40 + 1, this.y / 40 + 1) != '#')
+                    return true;
+                return false;
+            }
+            else {
+                if (map.get(this.x / 40 - 1, this.y / 40) != '#' && map.get(this.x / 40 - 1, this.y / 40 + 1) != '#')
+                    return true;
+                return false;
+            }
+        }
+        else {
             return true;
-        return false;
+        }
     }
 
     public int getX() {

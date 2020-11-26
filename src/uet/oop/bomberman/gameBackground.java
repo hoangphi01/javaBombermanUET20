@@ -3,7 +3,6 @@ package uet.oop.bomberman;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +17,6 @@ import javafx.util.Pair;
 import java.util.Arrays;
 import java.util.List;
 
-import static javafx.application.Application.launch;
 
 public class gameBackground extends Pane {
     public static final int BWIDTH = 800;
@@ -26,7 +24,7 @@ public class gameBackground extends Pane {
 
     private List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("PLAY", BombermanGame::startGame),
-            new Pair<String, Runnable>("HOW TO PLAY", () -> {}),
+            new Pair<String, Runnable>("HOW TO PLAY", BombermanGame::loadTutorial),
             new Pair<String, Runnable>("EXIT TO DESKTOP", Platform::exit)
     );
 
