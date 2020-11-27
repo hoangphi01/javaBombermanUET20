@@ -34,7 +34,7 @@ public class Sprite {
     |--------------------------------------------------------------------------
      */
     public static Sprite[][] grass = new Sprite[21][21];
-    public static Sprite brick = new Sprite(DEFAULT_SIZE, 7, 0, SpriteSheet.tiles, 40, 40);
+    public static Sprite brick = new Sprite(DEFAULT_SIZE, 16, 19, SpriteSheet.tiles, 40, 40);
     public static Sprite wall = new Sprite(DEFAULT_SIZE, 14, 15, SpriteSheet.tiles, 40, 40);
     //public static Sprite bomb = new Sprite(DEFAULT_SIZE, 7, 27, SpriteSheet.tiles, 40, 40);
     public static Sprite test = new Sprite();
@@ -199,8 +199,30 @@ public class Sprite {
     |--------------------------------------------------------------------------
      */
     public static Sprite powerup_bombs = new Sprite(DEFAULT_SIZE, 0, 10, SpriteSheet.tiles, 16, 16);
-    public static Sprite powerup_flames = new Sprite(DEFAULT_SIZE, 1, 10, SpriteSheet.tiles, 16, 16);
-    public static Sprite powerup_speed = new Sprite(DEFAULT_SIZE, 2, 10, SpriteSheet.tiles, 16, 16);
+    public static Sprite center_flame = new Sprite(DEFAULT_SIZE, 3, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite center_flame1 = new Sprite(DEFAULT_SIZE, 2, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite center_flame2 = new Sprite(DEFAULT_SIZE, 1, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite center_flame3 = new Sprite(DEFAULT_SIZE, 0, 15, SpriteSheet.tiles, 16, 16);
+
+    public static Sprite up_flame = new Sprite(DEFAULT_SIZE, 15, 19, SpriteSheet.tiles, 16, 16);
+    public static Sprite up_flame1 = new Sprite(DEFAULT_SIZE, 15, 18, SpriteSheet.tiles, 16, 16);
+    public static Sprite up_flame2 = new Sprite(DEFAULT_SIZE, 15, 17, SpriteSheet.tiles, 16, 16);
+    public static Sprite up_flame3 = new Sprite(DEFAULT_SIZE, 15, 16, SpriteSheet.tiles, 16, 16);
+
+    public static Sprite down_flame = new Sprite(DEFAULT_SIZE, 14, 16, SpriteSheet.tiles, 16, 16);
+    public static Sprite down_flame1 = new Sprite(DEFAULT_SIZE, 14, 17, SpriteSheet.tiles, 16, 16);
+    public static Sprite down_flame2 = new Sprite(DEFAULT_SIZE, 14, 18, SpriteSheet.tiles, 16, 16);
+    public static Sprite down_flame3 = new Sprite(DEFAULT_SIZE, 14, 19, SpriteSheet.tiles, 16, 16);
+
+    public static Sprite right_flame = new Sprite(DEFAULT_SIZE, 8, 16, SpriteSheet.tiles, 16, 16);
+    public static Sprite right_flame1 = new Sprite(DEFAULT_SIZE, 9, 16, SpriteSheet.tiles, 16, 16);
+    public static Sprite right_flame2 = new Sprite(DEFAULT_SIZE, 10, 16, SpriteSheet.tiles, 16, 16);
+    public static Sprite right_flame3 = new Sprite(DEFAULT_SIZE, 11, 16, SpriteSheet.tiles, 16, 16);
+
+    public static Sprite left_flame = new Sprite(DEFAULT_SIZE, 11, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite left_flame1 = new Sprite(DEFAULT_SIZE, 10, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite left_flame2 = new Sprite(DEFAULT_SIZE, 9, 15, SpriteSheet.tiles, 16, 16);
+    public static Sprite left_flame3 = new Sprite(DEFAULT_SIZE, 8, 15, SpriteSheet.tiles, 16, 16);
     public static Sprite powerup_wallpass = new Sprite(DEFAULT_SIZE, 3, 10, SpriteSheet.tiles, 16, 16);
     public static Sprite powerup_detonator = new Sprite(DEFAULT_SIZE, 4, 10, SpriteSheet.tiles, 16, 16);
     public static Sprite powerup_bombpass = new Sprite(DEFAULT_SIZE, 5, 10, SpriteSheet.tiles, 16, 16);
