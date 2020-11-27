@@ -31,13 +31,11 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 20;
     public static final int HEIGHT = 13;
 
-    private static AnimationTimer timer;
     private static final Group root = new Group();
 
     // Tao scene
     private static final Scene scene = new Scene(root);
     private static gameBackground bg = new gameBackground();
-    private static KeyBoard key = new KeyBoard();
 
     // Sound
     private static Media media;
@@ -67,9 +65,7 @@ public class BombermanGame extends Application {
         root.getChildren().remove(bg);
         bg = null;
         //playBackgroundSound();
-        timer.stop();
         createMap();
-        timer.start();
     }
 
     public static void loadTutorial() {
@@ -124,7 +120,7 @@ public class BombermanGame extends Application {
         Update updates = new Update();
 
         //MovingEntity bomb = new Bomb();
-        timer = new AnimationTimer() {
+        AnimationTimer timer = new AnimationTimer() {
             int cnt = -1;
             int timeBomb = -1;
             int[][] dir = {{0, 5}, {5, 0}, {-5, 0}, {0, -5}};
@@ -137,8 +133,16 @@ public class BombermanGame extends Application {
             int posX;
             int posY;
             long last = 0;
+            boolean checkBombUp = false;
+            boolean checkBombDown = false;
+            boolean checkBombRight = false;
+            boolean checkBombLeft = false;
             MovingEntity bomb = new Bomb();
-
+            MovingEntity flameCenter = new Flame();
+            MovingEntity flameUp = new Flame();
+            MovingEntity flameDown = new Flame();
+            MovingEntity flameRight = new Flame();
+            MovingEntity flameLeft = new Flame();
             @Override
             public void handle(long l) {
                 render();
@@ -155,28 +159,157 @@ public class BombermanGame extends Application {
                     else {
                         updates.updateLeft(entities.get(0), cnt);
                     }
+                    //entities.get(0)
                 }
+
                 if (timeBomb == 0) {
-                    posX = entities.get(0).getX();
-                    posY = entities.get(0).getY();
-                    updates.updateBomb(bomb, timeBomb, posX, posY);
-                    timeBomb++;
+                        posX = entities.get(0).getX();
+                        posY = entities.get(0).getY();
+                        updates.updateBomb(bomb, timeBomb, posX, posY);
+                        timeBomb++;
                 }
                 if (timeBomb > 0 && timeBomb < 120) {
-                    updates.updateBomb(bomb, timeBomb, posX, posY);
-                    timeBomb++;
+                        updates.updateBomb(bomb, timeBomb, posX, posY);
+                        timeBomb++;
                 }
 
                 if (timeBalloom % 10 == 0) {
                     updates.updateBombExplode(bomb, timeBomb, posX, posY);
                     cntBalloom++;
+
+                }
+                //System.out.println(cntBombExplode);
+                if (cntBombExplode >= 0)
+                    cntBombExplode++;
+                if (cntBombExplode >= 15 && cntBombExplode <= 30) {
+                    entities.remove(flameCenter);
+                    flameCenter = new Flame(posX / 40, posY / 40, Sprite.center_flame1.getFxImage());
+                    entities.add(flameCenter);
+                    if (checkBombUp) {
+                        entities.remove(flameUp);
+                        flameUp = new Flame(posX / 40, posY / 40 - 1, Sprite.up_flame1.getFxImage());
+                        entities.add(flameUp);
+
+                    }
+
+                    if (checkBombDown) {
+                        entities.remove(flameDown);
+                        flameDown = new Flame(posX / 40, posY / 40 + 1, Sprite.down_flame1.getFxImage());
+                        entities.add(flameDown);
+                    }
+
+                    if (checkBombRight) {
+                        entities.remove(flameRight);
+                        flameRight = new Flame(posX / 40 + 1, posY / 40, Sprite.right_flame1.getFxImage());
+                        entities.add(flameRight);
+                    }
+                    if (checkBombLeft) {
+                        entities.remove(flameLeft);
+                        flameLeft = new Flame(posX / 40 - 1, posY / 40, Sprite.left_flame1.getFxImage());
+                        entities.add(flameLeft);
+                    }
+                    //cntBombExplode++;
+                }
+
+                else if (cntBombExplode > 30 && cntBombExplode < 45) {
+                    entities.remove(flameCenter);
+                    flameCenter = new Flame(posX / 40, posY / 40, Sprite.center_flame2.getFxImage());
+                    entities.add(flameCenter);
+                    if (checkBombUp) {
+                        entities.remove(flameUp);
+                        flameUp = new Flame(posX / 40, posY / 40 - 1, Sprite.up_flame2.getFxImage());
+                        entities.add(flameUp);
+
+                    }
+
+                    if (checkBombDown) {
+                        entities.remove(flameDown);
+                        flameDown = new Flame(posX / 40, posY / 40 + 1, Sprite.down_flame2.getFxImage());
+                        entities.add(flameDown);
+                    }
+
+                    if (checkBombRight) {
+                        entities.remove(flameRight);
+                        flameRight = new Flame(posX / 40 + 1, posY / 40, Sprite.right_flame2.getFxImage());
+                        entities.add(flameRight);
+                    }
+                    if (checkBombLeft) {
+                        entities.remove(flameLeft);
+                        flameLeft = new Flame(posX / 40 - 1, posY / 40, Sprite.left_flame2.getFxImage());
+                        entities.add(flameLeft);
+                    }
+                    //cntBombExplode++;
+                }
+
+                else if (cntBombExplode > 45 && cntBombExplode <= 60) {
+                    entities.remove(flameCenter);
+                    flameCenter = new Flame(posX / 40, posY / 40, Sprite.center_flame3.getFxImage());
+                    entities.add(flameCenter);
+                    if (checkBombUp) {
+                        entities.remove(flameUp);
+                        flameUp = new Flame(posX / 40, posY / 40 - 1, Sprite.up_flame3.getFxImage());
+                        entities.add(flameUp);
+
+                    }
+
+                    if (checkBombDown) {
+                        entities.remove(flameDown);
+                        flameDown = new Flame(posX / 40, posY / 40 + 1, Sprite.down_flame3.getFxImage());
+                        entities.add(flameDown);
+                    }
+
+                    if (checkBombRight) {
+                        entities.remove(flameRight);
+                        flameRight = new Flame(posX / 40 + 1, posY / 40, Sprite.right_flame3.getFxImage());
+                        entities.add(flameRight);
+                    }
+                    if (checkBombLeft) {
+                        entities.remove(flameLeft);
+                        flameLeft = new Flame(posX / 40 - 1, posY / 40, Sprite.left_flame3.getFxImage());
+                        entities.add(flameLeft);
+                    }
+                    //cntBombExplode = -1;
+                }
+                else if (cntBombExplode > 60){
+                    entities.remove(flameCenter);
+                    entities.remove(flameUp);
+                    entities.remove(flameDown);
+                    entities.remove(flameRight);
+                    entities.remove(flameLeft);
+                    cntBombExplode = -1;
                 }
 
                 if (timeBomb == 120) {
                     timeBomb = -1;
                     cntBombExplode = 0;
+                    flameCenter = new Flame(posX / 40, posY / 40, Sprite.center_flame.getFxImage());
+                    entities.add(flameCenter);
+                    //System.out.println(posX + " " + (-20 % 40));
+                    if (bomb.check(0, -5)) {
+                        flameUp = new Flame(posX / 40, posY / 40 - 1, Sprite.up_flame.getFxImage());
+                        entities.add(flameUp);
+                        checkBombUp = true;
+                    }
+
+                    if (bomb.check(0, 5)) {
+                        flameDown = new Flame(posX / 40, posY / 40 + 1, Sprite.down_flame.getFxImage());
+                        entities.add(flameDown);
+                        checkBombDown = true;
+                    }
+
+                    if (bomb.check(5, 0)) {
+                        flameRight = new Flame(posX / 40 + 1, posY / 40, Sprite.right_flame.getFxImage());
+                        entities.add(flameRight);
+                        checkBombRight = true;
+                    }
+                    if (bomb.check(-5, 0)) {
+                        flameLeft = new Flame(posX / 40 - 1, posY / 40, Sprite.left_flame.getFxImage());
+                        entities.add(flameLeft);
+                        checkBombLeft = true;
+                    }
                     entities.remove(bomb);
                 }
+
 
                 if (timeBalloom % 10 == 0) {
                     if (entities.get(1).check(dir[directionBalloom][0], dir[directionBalloom][1])) {
@@ -215,35 +348,34 @@ public class BombermanGame extends Application {
                         directionBalloom = newDir;
                         cntBalloom = 1;
                     }
-                    System.out.println(cntBalloom + " " + directionBalloom);
                 }
-                scene.setOnKeyPressed(e -> {
-                    if (!(cnt >= 0 && cnt < 4)) {
-                        if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
-                            cnt = 0;
-                            direction = 0;
-                        } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-                            cnt = 0;
-                            direction = 1;
-                        } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-                            cnt = 0;
-                            direction = 2;
-                        } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-                            cnt = 0;
-                            direction = 3;
+
+                    scene.setOnKeyPressed(e -> {
+                        if (!(cnt >= 0 && cnt < 4)) {
+                            if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
+                                cnt = 0;
+                                direction = 0;
+                            } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+                                cnt = 0;
+                                direction = 1;
+                            } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
+                                cnt = 0;
+                                direction = 2;
+                            } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
+                                cnt = 0;
+                                direction = 3;
+                            } else if (e.getCode() == KeyCode.SPACE && timeBomb == -1) {
+
+                                entities.add(bomb);
+                                timeBomb = 0;
+
+                            }
                         }
 
-                    }
-                    else if (e.getCode() == KeyCode.SPACE && timeBomb == -1) {
-
-                        entities.add(bomb);
-                        timeBomb = 0;
-                    }
-
-                });
+                    });
                 if (cnt != -1)
                     cnt++;
-                timeBalloom++;
+                timeBalloom++; // reset sau 1e8
             }
         };
         timer.start();
@@ -259,7 +391,7 @@ public class BombermanGame extends Application {
         entities.add(balloom);
     }
 
-    public static void createMap() {
+    public void createMap() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 2; j < HEIGHT; j++) {
                 Entity object;
@@ -275,6 +407,16 @@ public class BombermanGame extends Application {
                 stillObjects.add(object);
             }
         }
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                if (map.get(i, j) == '*') {
+                    Entity object;
+                    object = new Brick(i, j, Sprite.brick.getFxImage());
+                    stillObjects.add(object);
+                }
+            }
+        }
+
     }
 
     public void render() {
