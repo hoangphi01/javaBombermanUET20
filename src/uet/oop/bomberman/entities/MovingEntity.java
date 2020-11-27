@@ -9,6 +9,7 @@ import static java.lang.Math.abs;
 
 public abstract class MovingEntity extends Entity {
     Map map = new Map();
+
     public  MovingEntity() {
 
     }
@@ -18,37 +19,40 @@ public abstract class MovingEntity extends Entity {
         this.img = img;
     }
 
+    public void setBomb(int x, int y) {
+        //map.set();
+    }
     public boolean check(int addX, int addY) {
         if (this.x % 40 == 0 && this.y % 40 == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / 40, this.y / 40 + 1) != '#')
+                if (map.get(this.x / 40, this.y / 40 + 1) == ' ')
                     return true;
                 return false;
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / 40, this.y / 40 - 1) != '#')
+                if (map.get(this.x / 40, this.y / 40 - 1) == ' ')
                     return true;
                 return false;
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / 40 + 1, this.y / 40) != '#')
+                if (map.get(this.x / 40 + 1, this.y / 40) == ' ')
                     return true;
                 return false;
             }
             else {
-                if (map.get(this.x / 40 - 1, this.y / 40) != '#')
+                if (map.get(this.x / 40 - 1, this.y / 40) == ' ')
                     return true;
                 return false;
             }
         }
         else if (this.x % 40 != 0 && this.y % 40 == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / 40, this.y / 40 + 1) != '#' && map.get(this.x / 40 + 1, this.y / 40 + 1) != '#')
+                if (map.get(this.x / 40, this.y / 40 + 1) == ' ' && map.get(this.x / 40 + 1, this.y / 40 + 1) == ' ')
                     return true;
                 return false;
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / 40, this.y / 40 - 1) != '#' && map.get(this.x / 40 + 1, this.y / 40 - 1) != '#')
+                if (map.get(this.x / 40, this.y / 40 - 1) == ' ' && map.get(this.x / 40 + 1, this.y / 40 - 1) == ' ')
                     return true;
                 return false;
             }
@@ -64,12 +68,12 @@ public abstract class MovingEntity extends Entity {
                 return true;
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / 40 + 1, this.y / 40) != '#' && map.get(this.x / 40 + 1, this.y / 40 + 1) != '#')
+                if (map.get(this.x / 40 + 1, this.y / 40) == ' ' && map.get(this.x / 40 + 1, this.y / 40 + 1) == ' ')
                     return true;
                 return false;
             }
             else {
-                if (map.get(this.x / 40 - 1, this.y / 40) != '#' && map.get(this.x / 40 - 1, this.y / 40 + 1) != '#')
+                if (map.get(this.x / 40 - 1, this.y / 40) == ' ' && map.get(this.x / 40 - 1, this.y / 40 + 1) == ' ')
                     return true;
                 return false;
             }
