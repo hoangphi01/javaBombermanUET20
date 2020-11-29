@@ -211,7 +211,7 @@ public class BombermanGame extends Application {
                     //cntBombExplode++;
                 }
 
-                else if (cntBombExplode > 30 && cntBombExplode < 45) {
+                else if (cntBombExplode > 30 && cntBombExplode <= 45) {
                     entities.remove(flameCenter);
                     flameCenter = new Flame(posX / 40, posY / 40, Sprite.center_flame2.getFxImage());
                     entities.add(flameCenter);
