@@ -30,7 +30,7 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 20;
     public static final int HEIGHT = 13;
-
+    public  static final Map map = new Map();
     private static final Group root = new Group();
 
     // Tao scene
