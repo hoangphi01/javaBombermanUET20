@@ -9,8 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
@@ -19,8 +17,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +38,9 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     //Các đối tượng động
-    private static List<MovingEntity> entities = new ArrayList<>();
+    private List<MovingEntity> entities = new ArrayList<>();
 
     //Các đối tượng tĩnh: grass, wall
-    private static List<Entity> stillObjects = new ArrayList<>();
 
     private static List<Entity> stuffObjects = new ArrayList<>();
     private static List<Entity> hearts = new ArrayList<>();
@@ -143,15 +138,16 @@ public class BombermanGame extends Application {
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
-        root.getChildren().addAll(canvas, bg);
+        Group root = new Group();
+        root.getChildren().add(canvas);
+
+        // Tao scene
+        Scene scene = new Scene(root);
 
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
-
-        //update
         Update updates = new Update();
-
         //MovingEntity bomb = new Bomb();
 
         MovingEntity bomberman = new Bomber(1, 3, Sprite.player[1][0].getFxImage());
@@ -159,7 +155,6 @@ public class BombermanGame extends Application {
             int cnt = -1;
             int dBomber = 0;
             MovingEntity bomb = new Bomb();
-
             @Override
             public void handle(long l) {
                 render();
@@ -207,9 +202,15 @@ public class BombermanGame extends Application {
         //Thêm bomber vào object entities
         MovingEntity balloom = new Bomber(18, 11, Sprite.balloom_left[0].getFxImage());
         entities.add(balloom);
+
     }
 
-    public static void createMap() {
+    public void createMap() {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < 2; j++) {
+                stillObjects.add(new StaticEntity(i, j, Sprite.grass[20][15].getFxImage()));
+            }
+        }
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < 2; j++) {
                 stillObjects.add(new StaticEntity(i, j, Sprite.grass[20][15].getFxImage()));
@@ -220,7 +221,6 @@ public class BombermanGame extends Application {
                 if (j == 2 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1 || (i > 2 && i % 2 == 1 && j % 2 == 0 && i < 19 && j < 14)) {
                     stillObjects.add(new StaticEntity(i, j, Sprite.wall.getFxImage()));
                 }
-                // Khởi tạo grass
                 else {
                     stillObjects.add(new StaticEntity(i, j, Sprite.grass[i - 1][j - 1].getFxImage()));
                 }

@@ -1,5 +1,7 @@
 package uet.oop.bomberman;
 
+import javafx.util.Pair;
+import uet.oop.bomberman.entities.Bomb;
 import uet.oop.bomberman.entities.Flame;
 import uet.oop.bomberman.entities.MovingEntity;
 import uet.oop.bomberman.graphics.Sprite;
@@ -73,7 +75,7 @@ public class Update {
             cntBalloom++;
         }
 
-        int t = 15;
+        int t = 10;
         if (cntBombExplode >= 0 && cntBombExplode <= t) {
             entities = updateBombExplode(entities, posX, posY, 0);
         }
