@@ -24,6 +24,7 @@ public class gameBackground extends Pane {
 
     private List<Pair<String, Runnable>> menuData = Arrays.asList(
             new Pair<String, Runnable>("PLAY", BombermanGame::startGame),
+            new Pair<String, Runnable>("PLAY CHRISTMAS VERSION", BombermanGame::Christmas),
             new Pair<String, Runnable>("HOW TO PLAY", BombermanGame::loadTutorial),
             new Pair<String, Runnable>("EXIT TO DESKTOP", Platform::exit)
     );
@@ -41,7 +42,7 @@ public class gameBackground extends Pane {
     }
 
     private void addLine(double x, double y) {
-        line = new Line(x, y, x, y + 100);
+        line = new Line(x, y, x, y + 130);
         line.setStrokeWidth(3);
         line.setStroke(Color.color(1, 1, 1, 0.75));
         line.setEffect(new DropShadow(5, Color.BLACK));
@@ -88,8 +89,8 @@ public class gameBackground extends Pane {
 
     public gameBackground() {
         addBackground();
-        addLine(75,100);
-        addMenu(80,100);
+        addLine(75,50);
+        addMenu(80,50);
         startAnimation();
     }
 

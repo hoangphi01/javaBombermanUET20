@@ -1,17 +1,13 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import uet.oop.bomberman.Map;
+import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends MovingEntity {
-    int cnt = 0;
     public Bomber(int x, int y, Image img) {
         super( x, y, img);
     }
-
     @Override
     public void update(int x, int y, Image img) {
         this.x += x;

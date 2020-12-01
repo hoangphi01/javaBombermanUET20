@@ -6,13 +6,9 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.io.File;
 
 public class BackgroundItem extends Pane {
     private Text text;
@@ -43,11 +39,11 @@ public class BackgroundItem extends Pane {
 
         text.setOnMouseEntered(data -> {
             // play sound
-            BombermanGame.playClick();
+            gameSound.playClick();
         });
 
         text.setOnMouseClicked(data ->{
-            BombermanGame.playClick();
+            gameSound.playClick();
         });
 
 
