@@ -166,7 +166,6 @@ public class BombermanGame extends Application {
 
                 updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, dBomber, bombs, map);
 
-                updates.update(stuffObjects, hearts, entities, bomberman, balloom, cnt, dBomber, bombs, map);
                 scene.setOnKeyPressed(e -> {
                     if (!(cnt >= 0 && cnt < 4)) {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
