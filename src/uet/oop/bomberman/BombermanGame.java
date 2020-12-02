@@ -67,6 +67,7 @@ public class BombermanGame extends Application {
 
     public static void startLevel1() {
         levelStartSound = new MediaPlayer(new Media(new File("src/Music/StartLevel.mp3").toURI().toString()));
+        levelStartSound.setVolume(10);
         levelStartSound.play();
         Image startLevel = new Image("/textures/level/STAGE1.png") ;
         ImageView imageView = new ImageView();
@@ -176,15 +177,19 @@ public class BombermanGame extends Application {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                             cnt = 0;
                             dBomber = 0;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
                             cnt = 0;
                             dBomber = 1;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                             cnt = 0;
                             dBomber = 2;
+                            gameSound.moveRightLeftSound();
                         } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                             cnt = 0;
                             dBomber = 3;
+                            gameSound.moveRightLeftSound();
                         } else if (e.getCode() == KeyCode.SPACE && entities.size() == 2) {
                             bomb = new Bomb();
                             entities.add(bomb);

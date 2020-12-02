@@ -25,6 +25,7 @@ public class gameSound {
         String soundLocation = "src/Music/BackgroundSound.mp3";
         media = new Media(new File(soundLocation).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(10);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
@@ -47,10 +48,21 @@ public class gameSound {
         explosion.play();
     }
 
+    public static void moveUpDownSound() {
+        AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundUD.mp3").toUri().toString());
+        explosion.play();
+    }
+
+    public static void moveRightLeftSound() {
+        AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundLR.mp3").toUri().toString());
+        explosion.play();
+    }
+
     public static void soundChristmas() {
         String soundLocation = "src/Music/Christmas.mp3";
         media = new Media(new File(soundLocation).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(10);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
