@@ -11,13 +11,11 @@ import java.util.Random;
 public class gameSnow extends AnchorPane {
 
     Random random = new Random();
-    //AnchorPane root = new AnchorPane();
-
 
     public gameSnow() {
-        Circle c[] = new Circle[2000];
+        Circle c[] = new Circle[1500];
 
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 1500; i++) {
             c[i] = new Circle(1, 1, 1);
             c[i].setRadius(random.nextDouble() * 3);
             Color color = Color.rgb(255, 255, 255, random.nextDouble());
@@ -34,12 +32,9 @@ public class gameSnow extends AnchorPane {
         c.setTranslateX(100);
         TranslateTransition tt = new TranslateTransition();
         tt.setNode(c);
-        //tt.setFromY(-200);
         tt.setToY(520+200);
         tt.setToX(random.nextDouble() * c.getCenterX());
         tt.setDuration(Duration.seconds(time));
-        /*tt.setCycleCount((int) Double.POSITIVE_INFINITY);
-        tt.setAutoReverse(true);*/
         c.setCenterX(random.nextInt(800));
 
         tt.setOnFinished(e -> {
@@ -48,18 +43,5 @@ public class gameSnow extends AnchorPane {
         });
 
         tt.play();
-//        Animation walk = TranslateTransitionBuilder.create();
-//                .node(c)
-//                .fromY(-200)
-//                .toY(520+200)
-//                .toX(random.nextDouble() * c.getCenterX())
-//                .duration(Duration.seconds(time))
-//                .onFinished(new EventHandler<ActionEvent>() {
-//                    @Override
-//                    public void handle(ActionEvent t) {
-//                        Raining(c);
-//                    }
-//                }).build();
-//        walk.play();
     }
 }
