@@ -5,7 +5,6 @@ import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends MovingEntity {
-
     public Bomb() {
 
     }

@@ -16,7 +16,7 @@ public class Sprite {
     private SpriteSheet _sheet; //_sheet.size = tiles.size
 
     public static Sprite[][] grass = new Sprite[21][21];
-    public static Sprite brick = new Sprite(16, 19, SpriteSheet.tiles);
+    public static Sprite[] brick = new Sprite[6];
     public static Sprite wall = new Sprite(14, 15, SpriteSheet.tiles);
     public static Sprite heart = new Sprite(15, 15, SpriteSheet.tiles);
 
@@ -113,6 +113,11 @@ public class Sprite {
         flame_left[1] = new Sprite(6, 14, SpriteSheet.tiles);
         flame_left[2] = new Sprite(5, 14, SpriteSheet.tiles);
         flame_left[3] = new Sprite(4, 14, SpriteSheet.tiles);
+
+        brick[0] = new Sprite(16, 19, SpriteSheet.tiles);
+        brick[1] = new Sprite(17, 19, SpriteSheet.tiles);
+        brick[2] = new Sprite(18, 19, SpriteSheet.tiles);
+        brick[3] = new Sprite(19, 19, SpriteSheet.tiles);
     }
 
     private void load() {

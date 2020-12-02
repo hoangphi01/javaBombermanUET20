@@ -7,8 +7,6 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.Map;
 
 public abstract class MovingEntity extends Entity {
-    public Map map = new Map();
-    //public Map map = BombermanGame.map;
     public  MovingEntity() {
 
     }
@@ -17,37 +15,37 @@ public abstract class MovingEntity extends Entity {
         this.y = yUnit * Sprite.SCALED_SIZE;
         this.img = img;
     }
-    public boolean check(int addX, int addY)  {
+    public boolean check(int addX, int addY, char val, Map map)  {
         if (this.x % Sprite.SCALED_SIZE == 0 && this.y % Sprite.SCALED_SIZE == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == val)
                     return true;
                 return false;
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == val)
                     return true;
                 return false;
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == val)
                     return true;
                 return false;
             }
             else {
-                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == val)
                     return true;
                 return false;
             }
         }
         else if (this.x % Sprite.SCALED_SIZE != 0 && this.y % Sprite.SCALED_SIZE == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == ' ' && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == val)
                     return true;
                 return false;
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == ' ' && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE - 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE - 1) == val)
                     return true;
                 return false;
             }
@@ -63,12 +61,12 @@ public abstract class MovingEntity extends Entity {
                 return true;
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == ' ' && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == val)
                     return true;
                 return false;
             }
             else {
-                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == ' ' && map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE + 1) == ' ')
+                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == val && map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE + 1) == val)
                     return true;
                 return false;
             }
@@ -77,7 +75,6 @@ public abstract class MovingEntity extends Entity {
             return true;
         }
     }
-
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
