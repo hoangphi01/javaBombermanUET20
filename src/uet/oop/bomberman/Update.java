@@ -12,14 +12,18 @@ import static java.lang.Math.abs;
 public class Update {
 
     final int[][] d = {{0, -5}, {0, 5}, {5, 0}, {-5, 0}};
-    int cntBalloom = 0;
+    int[] cntBalloom = {0, 0};
+    int[] cntOneal = {0, 0};
     int cntBombExplode = -1;
     int timeNewBomb = 0;
-    int dBalloom = 0;
+    int[] dBalloom = {0, 0};
+    int[] dOneal = {0, 0};
     int posX;
     int posY;
-    int timeBalloom = 0;
+    int time;
     int timeBomb = -1;
+    int frameBalloom = 15;
+    int frameOneal = 13;
     boolean checkBombUp = false;
     boolean checkBombDown = false;
     boolean checkBombRight = false;
@@ -36,11 +40,12 @@ public class Update {
     private static List<MovingEntity> bomberman = new ArrayList<>();
     private static List<MovingEntity> bombs = new ArrayList<>();
     private static List<MovingEntity> balloom = new ArrayList<>();
+    private static List<MovingEntity> oneal = new ArrayList<>();
     private static List<MovingEntity> entities = new ArrayList<>();
     Map map;
 
     //Map map = new Map();
-    Map getMap() {
+    /*Map getMap() {
         return this.map;
     }
     List<MovingEntity> getBomberman (){
@@ -48,6 +53,9 @@ public class Update {
     }
     List<MovingEntity> getBalloom (){
         return this.balloom;
+    }
+    List<MovingEntity> getOneal (){
+        return this.oneal;
     }
     List<MovingEntity> getBombs (){
         return this.bombs;
@@ -60,11 +68,12 @@ public class Update {
     }
     List<MovingEntity> getStuffObjects (){
         return this.stuffObjects;
-    }
-    void update(List<MovingEntity> stuffObjects, List<Entity> hearts, List<MovingEntity> entities, List<MovingEntity> bomberman, List<MovingEntity> balloom, int cnt, int dBomber, List<MovingEntity> bombs, Map map) {
+    }*/
+    void update(List<MovingEntity> stuffObjects, List<Entity> hearts, List<MovingEntity> entities, List<MovingEntity> bomberman, List<MovingEntity> balloom, List<MovingEntity> oneal, int cnt, int dBomber, List<MovingEntity> bombs, Map map) {
         this.map = map;
         this.bomberman = bomberman;
         this.balloom = balloom;
+        this.oneal = oneal;
         this.bombs = bombs;
         this.entities = entities;
         this.hearts = hearts;
@@ -111,8 +120,15 @@ public class Update {
             updateBomb(bombs.get(0), timeBomb, posX, posY);
             timeBomb++;
         }
-        if (timeBalloom % 10 == 0) {
-            cntBalloom++;
+        for (int i = 0; i < this.balloom.size(); i++) {
+            if (time % frameBalloom == 0) {
+                cntBalloom[i]++;
+            }
+        }
+        for (int i = 0; i < this.oneal.size(); i++) {
+            if (time % frameOneal == 0) {
+                cntOneal[i]++;
+            }
         }
 
         int t = 10;
@@ -170,41 +186,74 @@ public class Update {
             }
             bombs.remove(0);
         }
-
-        if (balloom.size() > 0 && timeBalloom % 15 == 0) {
-            if (balloom.get(0).check(d[dBalloom][0], d[dBalloom][1], ' ', this.map)) {
-                if (dBalloom == 0 || dBalloom == 1) {
-                    this.balloom.get(0).update(d[dBalloom][0], d[dBalloom][1], Sprite.balloom_right[cntBalloom%4].getFxImage());
-                }
-                else {
-                    this.balloom.get(0).update(d[dBalloom][0], d[dBalloom][1], Sprite.balloom_left[cntBalloom%4].getFxImage());
-                }
-                cntBalloom++;
-            }
-            else {
-                Random generator = new Random();
-                int newD = generator.nextInt(4);
-                boolean checkD = false;
-                for (int i = 0; i < 4; i++) {
-                    if (this.balloom.get(0).check(d[i][0], d[i][1], ' ', this.map)) {
-                        checkD = true;
-                        break;
+        for (int i = 0; i < this.balloom.size(); i++) {
+            if (time % frameBalloom == 0) {
+                if (this.balloom.get(i).check(d[dBalloom[i]][0], d[dBalloom[i]][1], ' ', this.map)) {
+                    if (dBalloom[i] == 0 || dBalloom[i] == 1) {
+                        this.balloom.get(i).update(d[dBalloom[i]][0], d[dBalloom[i]][1], Sprite.balloom_right[cntBalloom[i]%4].getFxImage());
+                    } else {
+                        this.balloom.get(i).update(d[dBalloom[i]][0], d[dBalloom[i]][1], Sprite.balloom_left[cntBalloom[i]%4].getFxImage());
                     }
-                }
-                if (checkD == true) {
-                    while (!this.balloom.get(0).check(d[newD][0], d[newD][1],' ', this.map)) {
-                        newD = generator.nextInt(4);
+                    cntBalloom[i]++;
+                } else {
+                    Random generator = new Random();
+                    int newD = generator.nextInt(4);
+                    boolean checkD = false;
+                    for (int j = 0; j < 4; j++) {
+                        if (this.balloom.get(i).check(d[j][0], d[j][1], ' ', this.map)) {
+                            checkD = true;
+                            break;
+                        }
                     }
-                    if (newD == 0 || newD == 1)
-                        this.balloom.get(0).update(d[newD][0], d[newD][1], Sprite.balloom_right[1].getFxImage());
-                    else
-                        this.balloom.get(0).update(d[newD][0], d[newD][1], Sprite.balloom_left[1].getFxImage());
-                    dBalloom = newD;
-                    cntBalloom = 1;
+                    if (checkD == true) {
+                        while (!this.balloom.get(i).check(d[newD][0], d[newD][1], ' ', this.map)) {
+                            newD = generator.nextInt(4);
+                        }
+                        if (newD == 0 || newD == 2)
+                            this.balloom.get(i).update(d[newD][0], d[newD][1], Sprite.balloom_right[0].getFxImage());
+                        else
+                            this.balloom.get(i).update(d[newD][0], d[newD][1], Sprite.balloom_left[0].getFxImage());
+                        dBalloom[i] = newD;
+                        cntBalloom[i] = 0;
+                    }
                 }
             }
         }
-        timeBalloom++;
+        for (int i = 0; i < this.oneal.size(); i++) {
+            if (time % frameOneal == 0) {
+                if (this.oneal.get(i).check(d[dOneal[i]][0], d[dOneal[i]][1], ' ', this.map)) {
+                    if (dOneal[i] == 0 || dOneal[i] == 1) {
+                        this.oneal.get(i).update(d[dOneal[i]][0], d[dOneal[i]][1], Sprite.oneal_right[cntOneal[i]%4].getFxImage());
+                    } else {
+                        this.oneal.get(i).update(d[dOneal[i]][0], d[dOneal[i]][1], Sprite.oneal_left[cntOneal[i]%4].getFxImage());
+                    }
+                    cntOneal[i]++;
+                } else {
+                    Random generator = new Random();
+                    int newD = generator.nextInt(4);
+                    boolean checkD = false;
+                    for (int j = 0; j < 4; j++) {
+                        if (this.oneal.get(i).check(d[j][0], d[j][1], ' ', this.map)) {
+                            checkD = true;
+                            break;
+                        }
+                    }
+                    if (checkD == true) {
+                        frameOneal = (generator.nextInt(2) + 1) * 10;
+                        while (!this.oneal.get(i).check(d[newD][0], d[newD][1], ' ', this.map)) {
+                            newD = generator.nextInt(4);
+                        }
+                        if (newD == 0 || newD == 2)
+                            this.oneal.get(i).update(d[newD][0], d[newD][1], Sprite.oneal_right[0].getFxImage());
+                        else
+                            this.oneal.get(i).update(d[newD][0], d[newD][1], Sprite.oneal_left[0].getFxImage());
+                        dOneal[i] = newD;
+                        cntOneal[i] = 0;
+                    }
+                }
+            }
+        }
+        time++;
     }
 
     void updateBomb(MovingEntity bomb, int time, int x, int y) {
@@ -222,119 +271,91 @@ public class Update {
             bomb.update(x, y, Sprite.bomb[3].getFxImage());
         }
     }
-    boolean collision(int x1, int y1, int x2, int y2) {
-        if (abs(x1 - x2) < 40 && abs(y1 - y2) < 40)
+    boolean collision(int x1, int y1, int x2, int y2, int val) {
+        if (abs(x1 - x2) < val && abs(y1 - y2) < val)
             return true;
         return false;
+    }
+    void removeObjects(int posX, int posY) {
+        List<MovingEntity> removeBalloom = new ArrayList<>();
+        for (int i = 0; i < this.balloom.size(); i++) {
+            if (this.balloom.size() > 0 && collision(this.balloom.get(i).getX(), this.balloom.get(i).getY(), posX, posY, 40)) {
+                removeBalloom.add(this.balloom.get(i));
+            }
+        }
+        removeBalloom.forEach(o -> {
+            this.balloom.remove(o);
+        });
+        List<MovingEntity> removeOneal = new ArrayList<>();
+        for (int i = 0; i < this.oneal.size(); i++) {
+            if (this.oneal.size() > 0 && collision(this.oneal.get(i).getX(), this.oneal.get(i).getY(), posX, posY, 40)) {
+                removeOneal.add(this.oneal.get(i));
+            }
+        }
+        removeOneal.forEach(o -> {
+            this.oneal.remove(o);
+        });
+        List<MovingEntity> removeObject = new ArrayList<>();
+        this.stuffObjects.forEach(o -> {
+            if (collision(o.getX(), o.getY(), posX, posY, 40)) {
+                this.map.set(o.getX()/40, o.getY()/40, ' ');
+                removeObject.add(o);
+            }
+        });
+        removeObject.forEach(o -> {
+            this.stuffObjects.remove(o);
+        });
     }
     void updateBombExplode(int posX, int posY, int cnt) {
         this.entities.remove(flameCenter);
         flameCenter = new Flame(posX / Sprite.SCALED_SIZE, posY / Sprite.SCALED_SIZE, Sprite.flame_center[cnt].getFxImage());
         this.entities.add(flameCenter);
-        if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY)) {
+        if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY, 40)) {
             bomberman.remove(0);
             hearts.remove(0);
         }
-        if (this.balloom.size() > 0 && collision(this.balloom.get(0).getX(), this.balloom.get(0).getY(), posX, posY)) {
-            this.balloom.remove(0);
-        }
+        removeObjects(posX, posY);
         if (checkBombUp) {
             this.entities.remove(flameUp);
             flameUp = new Flame(posX / Sprite.SCALED_SIZE, posY / Sprite.SCALED_SIZE - 1, Sprite.flame_up[cnt].getFxImage());
             this.entities.add(flameUp);
-            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY - 40)) {
+            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY - 40, 40)) {
                 bomberman.remove(0);
                 hearts.remove(0);
             }
-            if (this.balloom.size() > 0 && collision(this.balloom.get(0).getX(), this.balloom.get(0).getY(), posX, posY - 40)) {
-                this.balloom.remove(0);
-            }
-            List<MovingEntity> removeObject = new ArrayList<>();
-            this.stuffObjects.forEach(o -> {
-                if (collision(o.getX(), o.getY(), posX, posY - 40)) {
-                    this.map.set(o.getX()/40, o.getY()/40, ' ');
-                    removeObject.add(o);
-                }
-            });
-            removeObject.forEach(o -> {
-                //MovingEntity newO = new Bomb(o.getX()/40, o.getY()/40, Sprite.brick[1].getFxImage());
-                //stuffObjects.add(newO);
-                stuffObjects.remove(o);
-            });
+            removeObjects(posX, posY - 40);
         }
 
         if (checkBombDown) {
             this.entities.remove(flameDown);
             flameDown = new Flame(posX / Sprite.SCALED_SIZE, posY / Sprite.SCALED_SIZE + 1, Sprite.flame_down[cnt].getFxImage());
             this.entities.add(flameDown);
-            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY + 40)) {
+            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX, posY + 40, 40)) {
                 this.bomberman.remove(0);
                 this.hearts.remove(0);
             }
-            if (this.balloom.size() > 0 && collision(this.balloom.get(0).getX(), this.balloom.get(0).getY(), posX, posY + 40)) {
-                this.balloom.remove(0);
-            }
-            List<MovingEntity> removeObject = new ArrayList<>();
-            this.stuffObjects.forEach(o -> {
-                if (collision(o.getX(), o.getY(), posX, posY + 40)) {
-                    this.map.set(o.getX()/40, o.getY()/40, ' ');
-                    removeObject.add(o);
-                }
-            });
-            removeObject.forEach(o -> {
-                //MovingEntity newO = new Bomb(o.getX()/40, o.getY()/40, Sprite.brick[1].getFxImage());
-                //stuffObjects.add(newO);
-                stuffObjects.remove(o);
-            });
+            removeObjects(posX, posY + 40);
         }
 
         if (checkBombRight) {
             this.entities.remove(flameRight);
             flameRight = new Flame(posX / Sprite.SCALED_SIZE + 1, posY / Sprite.SCALED_SIZE, Sprite.flame_right[cnt].getFxImage());
             this.entities.add(flameRight);
-            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX + 40, posY)) {
+            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX + 40, posY, 40)) {
                 this.bomberman.remove(0);
                 this.hearts.remove(0);
             }
-            if (this.balloom.size() > 0 && collision(this.balloom.get(0).getX(), this.balloom.get(0).getY(), posX + 40, posY)) {
-                this.balloom.remove(0);
-            }
-            List<MovingEntity> removeObject = new ArrayList<>();
-            this.stuffObjects.forEach(o -> {
-                if (collision(o.getX(), o.getY(), posX + 40, posY)) {
-                    this.map.set(o.getX()/40, o.getY()/40, ' ');
-                    removeObject.add(o);
-                }
-            });
-            removeObject.forEach(o -> {
-                //MovingEntity newO = new Bomb(o.getX()/40, o.getY()/40, Sprite.brick[1].getFxImage());
-                //stuffObjects.add(newO);
-                stuffObjects.remove(o);
-            });
+            removeObjects(posX + 40, posY);
         }
         if (checkBombLeft) {
             this.entities.remove(flameLeft);
             flameLeft = new Flame(posX / Sprite.SCALED_SIZE - 1, posY / Sprite.SCALED_SIZE, Sprite.flame_left[cnt].getFxImage());
             this.entities.add(flameLeft);
-            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX - 40, posY)) {
+            if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), posX - 40, posY, 40)) {
                 this.bomberman.remove(0);
                 this.hearts.remove(0);
             }
-            if (this.balloom.size() > 0 && collision(this.balloom.get(0).getX(), this.balloom.get(0).getY(), posX - 40, posY)) {
-                this.balloom.remove(0);
-            }
-            List<MovingEntity> removeObject = new ArrayList<>();
-            this.stuffObjects.forEach(o -> {
-                if (collision(o.getX(), o.getY(), posX - 40, posY)) {
-                    this.map.set(o.getX()/40, o.getY()/40, ' ');
-                    removeObject.add(o);
-                }
-            });
-            removeObject.forEach(o -> {
-                //MovingEntity newO = new Bomb(o.getX()/40, o.getY()/40, Sprite.brick[1].getFxImage());
-                //stuffObjects.add(newO);
-                stuffObjects.remove(o);
-            });
+            removeObjects(posX - 40, posY);
         }
     }
 }

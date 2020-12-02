@@ -44,22 +44,18 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private static List<Entity> stillObjects = new ArrayList<>();
     private static List<MovingEntity> stuffObjects = new ArrayList<>();
-    private static List<Integer> timeStuffObjects = new ArrayList<>();
     private static List<Entity> hearts = new ArrayList<>();
     private static List<MovingEntity> bomberman = new ArrayList<>();
     private static List<MovingEntity> balloom = new ArrayList<>();
+    private static List<MovingEntity> oneal = new ArrayList<>();
     private static List<MovingEntity> bombs = new ArrayList<>();
     private static List<MovingEntity> entities = new ArrayList<>();
     private static Entity bombItem = new Flame();
     private static Entity speedItem = new Flame();
     private static Entity flameItem = new Flame();
+    private static Entity portal = new Flame(6, 10, Sprite.portal.getFxImage());
 
     public static void Christmas() {
-//        ImageView imageView = new ImageView(new Image("/textures/SNOW.gif"));
-//        imageView.setFitWidth(800);
-//        imageView.setFitHeight(520);
-//        root.getChildren().add(imageView);
-
         startGameSpecial();
         gSnow = new gameSnow();
         root.getChildren().add(gSnow);
@@ -156,7 +152,10 @@ public class BombermanGame extends Application {
         bomberman.add(new Bomber(1, 3, Sprite.player[1][0].getFxImage()));
 
         balloom.add(new Bomber(18, 11, Sprite.balloom_left[0].getFxImage()));
-        //MovingEntity bomb = new Bomb();
+        balloom.add(new Bomber(8, 9, Sprite.balloom_left[0].getFxImage()));
+        oneal.add(new Bomber(18, 3, Sprite.oneal_left[0].getFxImage()));
+        oneal.add(new Bomber(12, 6, Sprite.oneal_left[0].getFxImage()));
+
         AnimationTimer timer = new AnimationTimer() {
             int cnt = -1;
             int dBomber = 0;
@@ -164,28 +163,25 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 render();
-                /*if (cntBombExplode != - 1) {
-                    int dx = entities.get(0).getX() - entities.get(0).getX() % 40;
-                    int dy = entities.get(0).getY() - entities.get(0).getY() % 40;
-                    if ((dx == posX && dy == posY) || (dx == posX - 40 && dy == posY) || (dx == posX + 40 && dy == posY) || (dx == posX && dy == posY + 40) || (dx == posX && dy == posY - 40)) {
-                        return;
-                    }
-                }*/
-                updates.update(stuffObjects, hearts, entities, bomberman, balloom, cnt, dBomber, bombs, map);
+                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, dBomber, bombs, map);
                 scene.setOnKeyPressed(e -> {
                     if (!(cnt >= 0 && cnt < 4)) {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                             cnt = 0;
                             dBomber = 0;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
                             cnt = 0;
                             dBomber = 1;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                             cnt = 0;
                             dBomber = 2;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                             cnt = 0;
                             dBomber = 3;
+                            gameSound.moveRightLeftSound();
                         } else if (e.getCode() == KeyCode.SPACE && bombs.size() == 0) {
                             bombs.add(new Bomb());
                         }
@@ -193,14 +189,18 @@ public class BombermanGame extends Application {
                 });
                 if (cnt != -1)
                     cnt++;
-                map = updates.getMap();
+                /*map = updates.getMap();
                 bomberman = updates.getBomberman();
                 balloom = updates.getBalloom();
+                oneal = updates.getOneal();
                 entities = updates.getEntities();
                 bombs = updates.getBombs();
                 hearts = updates.getHearts();
-                stuffObjects = updates.getStuffObjects();
+                stuffObjects = updates.getStuffObjects();*/
                 if (hearts.size() == 0) {
+                    this.stop();
+                }
+                if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
                     this.stop();
                 }
 
@@ -231,7 +231,6 @@ public class BombermanGame extends Application {
             for (int j = 0; j < HEIGHT; j++) {
                 if (map.get(i, j) == '*') {
                     stuffObjects.add(new Bomb(i, j, Sprite.brick[0].getFxImage()));
-                    timeStuffObjects.add(0);
                 }
             }
         }
@@ -255,7 +254,7 @@ public class BombermanGame extends Application {
 
         //render các đối tượng động
         bombs.forEach(g -> g.render(gc));
-
+        portal.render(gc);
         stuffObjects.forEach(g -> g.render(gc));
         hearts.forEach(g -> g.render(gc));
 
@@ -265,7 +264,9 @@ public class BombermanGame extends Application {
         //entities.get(0).render(gc);
 
         balloom.forEach(g -> g.render(gc));
+        oneal.forEach(g -> g.render(gc));
         bomberman.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
+
     }
 }
