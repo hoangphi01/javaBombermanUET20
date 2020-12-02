@@ -23,7 +23,8 @@ public class Update {
     int time;
     int timeBomb = -1;
     int frameBalloom = 15;
-    int frameOneal = 13;
+    int frameOneal = 7;
+    int frameBomber;
     boolean checkBombUp = false;
     boolean checkBombDown = false;
     boolean checkBombRight = false;
@@ -69,7 +70,7 @@ public class Update {
     List<MovingEntity> getStuffObjects (){
         return this.stuffObjects;
     }*/
-    void update(List<MovingEntity> stuffObjects, List<Entity> hearts, List<MovingEntity> entities, List<MovingEntity> bomberman, List<MovingEntity> balloom, List<MovingEntity> oneal, int cnt, int dBomber, List<MovingEntity> bombs, Map map) {
+    void update(List<MovingEntity> stuffObjects, List<Entity> hearts, List<MovingEntity> entities, List<MovingEntity> bomberman, List<MovingEntity> balloom, List<MovingEntity> oneal, int cnt, int frameBomber, int dBomber, List<MovingEntity> bombs, Map map) {
         this.map = map;
         this.bomberman = bomberman;
         this.balloom = balloom;
@@ -78,6 +79,7 @@ public class Update {
         this.entities = entities;
         this.hearts = hearts;
         this.stuffObjects = stuffObjects;
+        this.frameBomber = frameBomber;
         if (this.bombs.size() == 0)
             timeBomb = -1;
         else if (timeBomb == -1 && cntBombExplode == -1) {
@@ -88,7 +90,6 @@ public class Update {
             checkBombLeft = false;
             checkEvent = false;
         }
-        //BombermanGame.sett(0, '3');
         if (this.bomberman.size() == 0 && timeNewBomb < 50) {
             timeNewBomb++;
         }
@@ -96,14 +97,43 @@ public class Update {
             bomberman.add(new Bomber(1, 3, Sprite.player[1][0].getFxImage()));
             timeNewBomb = 0;
         }
-        if (this.bomberman.size() > 0 && cnt >= 0 && cnt < 4) {
-            if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
-                this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][cnt].getFxImage());
+        if (this.bomberman.size() > 0) {
+            if (cnt == 0 * frameBomber) {
+                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                    this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][0].getFxImage());
+                } else {
+                    this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][0].getFxImage());
+                }
             }
-            else {
-                this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][cnt].getFxImage());
+            else if (cnt == 1 * frameBomber) {
+                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                    this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][1].getFxImage());
+                } else {
+                    this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][1].getFxImage());
+                }
+            }
+            else if (cnt == 2 * frameBomber) {
+                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                    this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][2].getFxImage());
+                } else {
+                    this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][2].getFxImage());
+                }
+            }
+            else if (cnt == 3 * frameBomber) {
+                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                    this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][3].getFxImage());
+                } else {
+                    this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][3].getFxImage());
+                }
             }
         }
+        /*if (this.bomberman.size() > 0 && cnt >= 0 && cnt < 4) {
+            if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][cnt].getFxImage());
+            } else {
+                this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][cnt].getFxImage());
+            }
+        }*/
 
         if (timeBomb == 0) {
             posX = bomberman.get(0).getX();
@@ -254,6 +284,22 @@ public class Update {
             }
         }
         time++;
+        if (this.bomberman.size() > 0) {
+            balloom.forEach(o -> {
+                if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), o.getX(), o.getY(), 20)) {
+                    this.bomberman.remove(0);
+                    hearts.remove(0);
+                    return;
+                }
+            });
+            oneal.forEach(o -> {
+                if (this.bomberman.size() > 0 && collision(this.bomberman.get(0).getX(), this.bomberman.get(0).getY(), o.getX(), o.getY(), 20)) {
+                    this.bomberman.remove(0);
+                    hearts.remove(0);
+                    return;
+                }
+            });
+        }
     }
 
     void updateBomb(MovingEntity bomb, int time, int x, int y) {

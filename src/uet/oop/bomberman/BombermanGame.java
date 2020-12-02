@@ -53,6 +53,9 @@ public class BombermanGame extends Application {
     private static Entity bombItem = new Flame();
     private static Entity speedItem = new Flame();
     private static Entity flameItem = new Flame();
+    private static Entity rbombItem = new Flame();
+    private static Entity rspeedItem = new Flame();
+    private static Entity rflameItem = new Flame();
     private static Entity portal = new Flame(6, 10, Sprite.portal.getFxImage());
 
     public static void Christmas() {
@@ -152,20 +155,21 @@ public class BombermanGame extends Application {
         bomberman.add(new Bomber(1, 3, Sprite.player[1][0].getFxImage()));
 
         balloom.add(new Bomber(18, 11, Sprite.balloom_left[0].getFxImage()));
-        balloom.add(new Bomber(8, 9, Sprite.balloom_left[0].getFxImage()));
-        oneal.add(new Bomber(18, 3, Sprite.oneal_left[0].getFxImage()));
-        oneal.add(new Bomber(12, 6, Sprite.oneal_left[0].getFxImage()));
+        balloom.add(new Bomber(18, 2, Sprite.balloom_left[0].getFxImage()));
+        oneal.add(new Bomber(10, 7, Sprite.oneal_left[0].getFxImage()));
+        oneal.add(new Bomber(2, 11, Sprite.oneal_left[0].getFxImage()));
 
         AnimationTimer timer = new AnimationTimer() {
             int cnt = -1;
             int dBomber = 0;
+            int frameBomber = 5;
             MovingEntity bomb = new Bomb();
             @Override
             public void handle(long l) {
                 render();
-                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, dBomber, bombs, map);
+                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, frameBomber, dBomber, bombs, map);
                 scene.setOnKeyPressed(e -> {
-                    if (!(cnt >= 0 && cnt < 4)) {
+                    if (!(cnt >= 0 && cnt < frameBomber * 3 + 1)) {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                             cnt = 0;
                             dBomber = 0;
@@ -189,6 +193,7 @@ public class BombermanGame extends Application {
                 });
                 if (cnt != -1)
                     cnt++;
+
                 /*map = updates.getMap();
                 bomberman = updates.getBomberman();
                 balloom = updates.getBalloom();
@@ -197,6 +202,20 @@ public class BombermanGame extends Application {
                 bombs = updates.getBombs();
                 hearts = updates.getHearts();
                 stuffObjects = updates.getStuffObjects();*/
+
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 3 * 40, 7 * 40, 20)) {
+                    frameBomber = 2;
+                    rspeedItem = new Flame();
+                    speedItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 12 * 40, 5 * 40, 20)) {
+                    rflameItem = new Flame();
+                    flameItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 17 * 40, 11 * 40, 20)) {
+                    rbombItem = new Flame();
+                    rbombItem = new Flame();
+                }
                 if (hearts.size() == 0) {
                     this.stop();
                 }
@@ -235,7 +254,6 @@ public class BombermanGame extends Application {
             }
         }
 
-
         hearts.add(new StaticEntity(2, 0, Sprite.heart.getFxImage()));
         hearts.add(new StaticEntity(1, 0, Sprite.heart.getFxImage()));
         hearts.add(new StaticEntity(0, 0, Sprite.heart.getFxImage()));
@@ -243,6 +261,10 @@ public class BombermanGame extends Application {
         bombItem = new StaticEntity(17, 0, Sprite.BombItem.getFxImage());
         speedItem = new StaticEntity(18, 0, Sprite.SpeedItem.getFxImage());
         flameItem = new StaticEntity(19, 0, Sprite.FlameItem.getFxImage());
+
+        rbombItem = new StaticEntity(17, 11, Sprite.BombItem.getFxImage());
+        rspeedItem = new StaticEntity(3, 7, Sprite.SpeedItem.getFxImage());
+        rflameItem = new StaticEntity(12, 5, Sprite.FlameItem.getFxImage());
     }
 
     public void render() {
@@ -254,6 +276,9 @@ public class BombermanGame extends Application {
 
         //render các đối tượng động
         bombs.forEach(g -> g.render(gc));
+        rbombItem.render(gc);
+        rspeedItem.render(gc);
+        rflameItem.render(gc);
         portal.render(gc);
         stuffObjects.forEach(g -> g.render(gc));
         hearts.forEach(g -> g.render(gc));
@@ -261,6 +286,8 @@ public class BombermanGame extends Application {
         bombItem.render(gc);
         speedItem.render(gc);
         flameItem.render(gc);
+
+
         //entities.get(0).render(gc);
 
         balloom.forEach(g -> g.render(gc));
