@@ -164,28 +164,25 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 render();
-                /*if (cntBombExplode != - 1) {
-                    int dx = entities.get(0).getX() - entities.get(0).getX() % 40;
-                    int dy = entities.get(0).getY() - entities.get(0).getY() % 40;
-                    if ((dx == posX && dy == posY) || (dx == posX - 40 && dy == posY) || (dx == posX + 40 && dy == posY) || (dx == posX && dy == posY + 40) || (dx == posX && dy == posY - 40)) {
-                        return;
-                    }
-                }*/
                 updates.update(stuffObjects, hearts, entities, bomberman, balloom, cnt, dBomber, bombs, map);
                 scene.setOnKeyPressed(e -> {
                     if (!(cnt >= 0 && cnt < 4)) {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                             cnt = 0;
                             dBomber = 0;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
                             cnt = 0;
                             dBomber = 1;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                             cnt = 0;
                             dBomber = 2;
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                             cnt = 0;
                             dBomber = 3;
+                            gameSound.moveRightLeftSound();
                         } else if (e.getCode() == KeyCode.SPACE && bombs.size() == 0) {
                             bombs.add(new Bomb());
                         }
