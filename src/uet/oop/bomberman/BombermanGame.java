@@ -209,7 +209,6 @@ public class BombermanGame extends Application {
             int dBomber = 0;
             int frameBomber = 5;
             MovingEntity bomb = new Bomb();
-
             @Override
             public void handle(long l) {
                 render();
@@ -227,7 +226,7 @@ public class BombermanGame extends Application {
                         } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                             cnt = 0;
                             dBomber = 2;
-                            gameSound.moveRightLeftSound();
+                            gameSound.moveUpDownSound();
                         } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                             cnt = 0;
                             dBomber = 3;
@@ -268,6 +267,35 @@ public class BombermanGame extends Application {
                 if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
                     this.stop();
                     gameWin();
+                }
+
+                /*map = updates.getMap();
+                bomberman = updates.getBomberman();
+                balloom = updates.getBalloom();
+                oneal = updates.getOneal();
+                entities = updates.getEntities();
+                bombs = updates.getBombs();
+                hearts = updates.getHearts();
+                stuffObjects = updates.getStuffObjects();*/
+
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 3 * 40, 7 * 40, 20)) {
+                    frameBomber = 2;
+                    rspeedItem = new Flame();
+                    speedItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 12 * 40, 5 * 40, 20)) {
+                    rflameItem = new Flame();
+                    flameItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 17 * 40, 11 * 40, 20)) {
+                    rbombItem = new Flame();
+                    rbombItem = new Flame();
+                }
+                if (hearts.size() == 0) {
+                    this.stop();
+                }
+                if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
+                    this.stop();
                 }
 
             }
@@ -341,6 +369,8 @@ public class BombermanGame extends Application {
         bombItem.render(gc);
         speedItem.render(gc);
         flameItem.render(gc);
+
+
         //entities.get(0).render(gc);
 
         balloom.forEach(g -> g.render(gc));
