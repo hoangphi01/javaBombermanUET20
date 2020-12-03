@@ -30,7 +30,7 @@ public class BombermanGame extends Application {
     public static final int HEIGHT = 13;
 
     private static final Group root = new Group();
-    public static final Map map = new Map();
+    public static Map map = new Map();
 
     private static MediaPlayer levelStartSound;
 
@@ -42,34 +42,38 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    //Các đối tượng động
+    private static AnimationTimer timer;
+    private static List<Entity> stillObjects = new ArrayList<>();
+    private static List<MovingEntity> stuffObjects = new ArrayList<>();
+    private static List<Entity> hearts = new ArrayList<>();
+    private static List<MovingEntity> bomberman = new ArrayList<>();
+    private static List<MovingEntity> balloom = new ArrayList<>();
+    private static List<MovingEntity> oneal = new ArrayList<>();
+    private static List<MovingEntity> bombs = new ArrayList<>();
     private static List<MovingEntity> entities = new ArrayList<>();
 
-    //Các đối tượng tĩnh: grass, wall
-    private static List<Entity> stillObjects = new ArrayList<>();
-
-    private static List<Entity> stuffObjects = new ArrayList<>();
-    private static List<Entity> hearts = new ArrayList<>();
     private static Entity bombItem = new Flame();
     private static Entity speedItem = new Flame();
     private static Entity flameItem = new Flame();
+    private static Entity portal = new Flame(6, 10, Sprite.portal.getFxImage());
+
+    private static Entity rbombItem = new Flame();
+    private static Entity rspeedItem = new Flame();
+    private static Entity rflameItem = new Flame();
 
     public static void Christmas() {
-//        ImageView imageView = new ImageView(new Image("/textures/SNOW.gif"));
-//        imageView.setFitWidth(800);
-//        imageView.setFitHeight(520);
-//        root.getChildren().add(imageView);
-
         startGameSpecial();
         gSnow = new gameSnow();
         root.getChildren().add(gSnow);
     }
 
     public static void startLevel1() {
+        timer.stop();
+        createMap();
         levelStartSound = new MediaPlayer(new Media(new File("src/Music/StartLevel.mp3").toURI().toString()));
-        levelStartSound.setVolume(10);
+        levelStartSound.setVolume(0.5);
         levelStartSound.play();
-        Image startLevel = new Image("/textures/level/STAGE1.png") ;
+        Image startLevel = new Image("/textures/level/STAGE1.png");
         ImageView imageView = new ImageView();
         imageView.setFitWidth(800);
         imageView.setFitHeight(520);
@@ -79,6 +83,47 @@ public class BombermanGame extends Application {
                 new KeyFrame(Duration.seconds(2), new KeyValue(imageView.imageProperty(), null))
         );
         timeline.play();
+        timer.start();
+    }
+
+    public static void showOver() {
+        Image endLevel = new Image("/textures/GAMEOVER.gif");
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(520);
+//        root.getChildren().add(imageView);
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO, new KeyValue(imageView.imageProperty(), endLevel)),
+//                new KeyFrame(Duration.seconds(5), new KeyValue(imageView.imageProperty(), null))
+//        );
+//        timeline.play();
+//        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+//            if (key.getCode() == KeyCode.ENTER) {
+//                if (!root.getChildren().contains(bg)) {
+//                    gameSound.playClick();
+//                    root.getChildren().remove(imageView);
+//                    root.getChildren().add(bg);
+//                }
+//            }
+//        });
+
+        //gameOver.overSound();
+        if (!root.getChildren().contains(bg))
+            root.getChildren().add(bg);
+    }
+
+    public static void gameWin() {
+        ImageView imageView = new ImageView(new Image("/textures/GAMEWIN.png"));
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(520);
+
+        root.getChildren().add(imageView);
+    }
+
+    public static void clearObjs() {
+        bomberman.clear();
+        balloom.clear();
+        oneal.clear();
     }
 
     public static void main(String[] args) {
@@ -87,18 +132,18 @@ public class BombermanGame extends Application {
 
     public static void startGame() {
         root.getChildren().remove(bg);
-        bg = null;
+        //bg = null;
         startLevel1();
         gameSound.playBackgroundMusic();
-        createMap();
+        //createMap();
     }
 
     public static void startGameSpecial() {
         root.getChildren().remove(bg);
-        bg = null;
+        //bg = null;
         startLevel1();
         gameSound.soundChristmas();
-        createMap();
+        //createMap();
     }
 
     public static void loadTutorial() {
@@ -113,15 +158,13 @@ public class BombermanGame extends Application {
         root.getChildren().add(imageView);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.ENTER) {
-                if(root.getChildren().contains(imageView)) {
+            if (key.getCode() == KeyCode.ENTER) {
+                if (root.getChildren().contains(imageView)) {
                     gameSound.playClick();
                     root.getChildren().remove(imageView);
                     BombermanGame.startGame();
                 }
-            }
-
-            else if(key.getCode()==KeyCode.ESCAPE) {
+            } else if (key.getCode() == KeyCode.ESCAPE) {
                 if (!root.getChildren().contains(bg)) {
                     gameSound.playClick();
                     root.getChildren().remove(imageView);
@@ -150,30 +193,29 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
         stage.show();
 
+        //clearObjs();
         //update
         Update updates = new Update();
 
-        //MovingEntity bomb = new Bomb();
+//        bomberman.add(new Bomber(1, 3, Sprite.player[1][0].getFxImage()));
+//
+//        balloom.add(new Bomber(18, 11, Sprite.balloom_left[0].getFxImage()));
+//        balloom.add(new Bomber(18, 2, Sprite.balloom_left[0].getFxImage()));
+//        oneal.add(new Bomber(10, 7, Sprite.oneal_left[0].getFxImage()));
+//        oneal.add(new Bomber(2, 11, Sprite.oneal_left[0].getFxImage()));
 
-        MovingEntity bomberman = new Bomber(1, 3, Sprite.player[1][0].getFxImage());
-        AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             int cnt = -1;
             int dBomber = 0;
+            int frameBomber = 5;
             MovingEntity bomb = new Bomb();
 
             @Override
             public void handle(long l) {
                 render();
-                /*if (cntBombExplode != - 1) {
-                    int dx = entities.get(0).getX() - entities.get(0).getX() % 40;
-                    int dy = entities.get(0).getY() - entities.get(0).getY() % 40;
-                    if ((dx == posX && dy == posY) || (dx == posX - 40 && dy == posY) || (dx == posX + 40 && dy == posY) || (dx == posX && dy == posY + 40) || (dx == posX && dy == posY - 40)) {
-                        return;
-                    }
-                }*/
-                entities = updates.update(entities, cnt, dBomber, bomb );
+                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, frameBomber, dBomber, bombs, map);
                 scene.setOnKeyPressed(e -> {
-                    if (!(cnt >= 0 && cnt < 4)) {
+                    if (!(cnt >= 0 && cnt < frameBomber * 3 + 1)) {
                         if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                             cnt = 0;
                             dBomber = 0;
@@ -190,31 +232,60 @@ public class BombermanGame extends Application {
                             cnt = 0;
                             dBomber = 3;
                             gameSound.moveRightLeftSound();
-                        } else if (e.getCode() == KeyCode.SPACE && entities.size() == 2) {
-                            bomb = new Bomb();
-                            entities.add(bomb);
+                        } else if (e.getCode() == KeyCode.SPACE && bombs.size() == 0) {
+                            bombs.add(new Bomb());
                         }
                     }
                 });
                 if (cnt != -1)
                     cnt++;
+                /*map = updates.getMap();
+                bomberman = updates.getBomberman();
+                balloom = updates.getBalloom();
+                oneal = updates.getOneal();
+                entities = updates.getEntities();
+                bombs = updates.getBombs();
+                hearts = updates.getHearts();
+                stuffObjects = updates.getStuffObjects();*/
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 3 * 40, 7 * 40, 20)) {
+                    frameBomber = 2;
+                    rspeedItem = new Flame();
+                    speedItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 12 * 40, 5 * 40, 20)) {
+                    rflameItem = new Flame();
+                    flameItem = new Flame();
+                }
+                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 17 * 40, 11 * 40, 20)) {
+                    rbombItem = new Flame();
+                    rbombItem = new Flame();
+                }
+                if (hearts.size() == 0) {
+                    this.stop();
+                    //timer.stop();
+                    showOver();
+                }
+                if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
+                    this.stop();
+                    gameWin();
+                }
 
             }
         };
         timer.start();
 
-        createMap();
-
-        // Khởi tạo vị trí của bomber nằm ở ô x, y trong map và hướng nhân vật quay sang trái
-
-
-        entities.add(bomberman);
-        //Thêm bomber vào object entities
-        MovingEntity balloom = new Bomber(18, 11, Sprite.balloom_left[0].getFxImage());
-        entities.add(balloom);
+        //createMap();
     }
 
     public static void createMap() {
+        clearObjs();
+        stillObjects.clear();
+
+        bomberman.add(new Bomber(1, 3, Sprite.player[1][0].getFxImage()));
+        balloom.add(new Bomber(18, 11, Sprite.balloom_left[0].getFxImage()));
+        balloom.add(new Bomber(18, 2, Sprite.balloom_left[0].getFxImage()));
+        oneal.add(new Bomber(10, 7, Sprite.oneal_left[0].getFxImage()));
+        oneal.add(new Bomber(2, 11, Sprite.oneal_left[0].getFxImage()));
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < 2; j++) {
                 stillObjects.add(new StaticEntity(i, j, Sprite.grass[20][15].getFxImage()));
@@ -224,9 +295,7 @@ public class BombermanGame extends Application {
             for (int j = 2; j < HEIGHT; j++) {
                 if (j == 2 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1 || (i > 2 && i % 2 == 1 && j % 2 == 0 && i < 19 && j < 14)) {
                     stillObjects.add(new StaticEntity(i, j, Sprite.wall.getFxImage()));
-                }
-                // Khởi tạo grass
-                else {
+                } else {
                     stillObjects.add(new StaticEntity(i, j, Sprite.grass[i - 1][j - 1].getFxImage()));
                 }
             }
@@ -234,17 +303,23 @@ public class BombermanGame extends Application {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 if (map.get(i, j) == '*') {
-                    stuffObjects.add(new StaticEntity(i, j, Sprite.brick.getFxImage()));
+                    stuffObjects.add(new Bomb(i, j, Sprite.brick[0].getFxImage()));
                 }
             }
         }
-        hearts.add(new StaticEntity(0, 0, Sprite.heart.getFxImage()));
-        hearts.add(new StaticEntity(1, 0, Sprite.heart.getFxImage()));
+
+
         hearts.add(new StaticEntity(2, 0, Sprite.heart.getFxImage()));
+        hearts.add(new StaticEntity(1, 0, Sprite.heart.getFxImage()));
+        hearts.add(new StaticEntity(0, 0, Sprite.heart.getFxImage()));
+
         bombItem = new StaticEntity(17, 0, Sprite.BombItem.getFxImage());
         speedItem = new StaticEntity(18, 0, Sprite.SpeedItem.getFxImage());
         flameItem = new StaticEntity(19, 0, Sprite.FlameItem.getFxImage());
 
+        rbombItem = new StaticEntity(17, 11, Sprite.BombItem.getFxImage());
+        rspeedItem = new StaticEntity(3, 7, Sprite.SpeedItem.getFxImage());
+        rflameItem = new StaticEntity(12, 5, Sprite.FlameItem.getFxImage());
     }
 
     public void render() {
@@ -255,13 +330,23 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
 
         //render các đối tượng động
-        entities.forEach(g -> g.render(gc));
-
+        bombs.forEach(g -> g.render(gc));
+        rbombItem.render(gc);
+        rspeedItem.render(gc);
+        rflameItem.render(gc);
+        portal.render(gc);
         stuffObjects.forEach(g -> g.render(gc));
         hearts.forEach(g -> g.render(gc));
+
         bombItem.render(gc);
         speedItem.render(gc);
         flameItem.render(gc);
         //entities.get(0).render(gc);
+
+        balloom.forEach(g -> g.render(gc));
+        oneal.forEach(g -> g.render(gc));
+        bomberman.forEach(g -> g.render(gc));
+        entities.forEach(g -> g.render(gc));
+
     }
 }

@@ -11,10 +11,7 @@ public class Flame extends MovingEntity {
     public Flame(int x, int y, Image img) {
         super(x, y, img);
     }
-    @Override
-    public boolean check(int addX, int addY){
-        return true;
-    }
+
     @Override
     public void update(int x, int y, Image img) {
 

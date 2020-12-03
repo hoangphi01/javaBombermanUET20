@@ -9,22 +9,26 @@ import javafx.scene.image.*;
 public class Sprite {
 
     public static final int SCALED_SIZE = 40; //scale hình gốc
-    private static final int TRANSPARENT_COLOR = 0xffffffff; // color keying
+    private static final int TRANSPARENT_COLOR = 0xaaf0d1; // color keying
     public final int SIZE = 40; // = DEFAULT_SIZE
     private int _x, _y;
     public int[] _pixels;
     private SpriteSheet _sheet; //_sheet.size = tiles.size
 
     public static Sprite[][] grass = new Sprite[21][21];
-    public static Sprite brick = new Sprite(16, 19, SpriteSheet.tiles);
+    public static Sprite[] brick = new Sprite[6];
     public static Sprite wall = new Sprite(14, 15, SpriteSheet.tiles);
     public static Sprite heart = new Sprite(15, 15, SpriteSheet.tiles);
+    public static Sprite portal = new Sprite(15, 14, SpriteSheet.tiles);
 
     public static Sprite[][] player = new Sprite[6][6];
 
 
     public static Sprite[] balloom_left = new Sprite[6];
     public static Sprite[] balloom_right = new Sprite[6];
+
+    public static Sprite[] oneal_left = new Sprite[6];
+    public static Sprite[] oneal_right = new Sprite[6];
 
     public static Sprite[] flame_center = new Sprite[6];
     public static Sprite[] flame_up = new Sprite[6];
@@ -84,6 +88,16 @@ public class Sprite {
         balloom_right[2] = new Sprite(10, 15, SpriteSheet.tiles);
         balloom_right[3] = new Sprite(11, 15, SpriteSheet.tiles);
 
+        oneal_left[0] = new Sprite(0, 19, SpriteSheet.tiles);
+        oneal_left[1] = new Sprite(1, 19, SpriteSheet.tiles);
+        oneal_left[2] = new Sprite(0, 19, SpriteSheet.tiles);
+        oneal_left[3] = new Sprite(4, 19, SpriteSheet.tiles);
+
+        oneal_right[0] = new Sprite(5, 19, SpriteSheet.tiles);
+        oneal_right[1] = new Sprite(4, 19, SpriteSheet.tiles);
+        oneal_right[2] = new Sprite(5, 19, SpriteSheet.tiles);
+        oneal_right[3] = new Sprite(6, 19, SpriteSheet.tiles);
+
         bomb[0] = new Sprite(7, 19, SpriteSheet.tiles);
         bomb[1] = new Sprite(8, 19, SpriteSheet.tiles);
         bomb[2] = new Sprite(9, 19, SpriteSheet.tiles);
@@ -113,6 +127,11 @@ public class Sprite {
         flame_left[1] = new Sprite(6, 14, SpriteSheet.tiles);
         flame_left[2] = new Sprite(5, 14, SpriteSheet.tiles);
         flame_left[3] = new Sprite(4, 14, SpriteSheet.tiles);
+
+        brick[0] = new Sprite(16, 19, SpriteSheet.tiles);
+        brick[1] = new Sprite(17, 19, SpriteSheet.tiles);
+        brick[2] = new Sprite(18, 19, SpriteSheet.tiles);
+        brick[3] = new Sprite(19, 19, SpriteSheet.tiles);
     }
 
     private void load() {

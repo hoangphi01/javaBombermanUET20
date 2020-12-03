@@ -25,7 +25,7 @@ public class gameSound {
         String soundLocation = "src/Music/BackgroundSound.mp3";
         media = new Media(new File(soundLocation).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(10);
+        mediaPlayer.setVolume(0.7);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
@@ -62,7 +62,7 @@ public class gameSound {
         String soundLocation = "src/Music/Christmas.mp3";
         media = new Media(new File(soundLocation).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(10);
+        mediaPlayer.setVolume(0.7);
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
