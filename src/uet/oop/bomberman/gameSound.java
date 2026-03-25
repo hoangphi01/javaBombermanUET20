@@ -13,62 +13,88 @@ public class gameSound {
     private static Media media;
 
     public static void playClick() {
-        Media media;
-        String soundLocation = "src/Music/ClickSound.mp3";
-        media = new Media(new File(soundLocation).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        try {
+            Media media;
+            String soundLocation = "src/Music/ClickSound.mp3";
+            media = new Media(new File(soundLocation).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void playBackgroundMusic() {
-        // Tao Nhac nen
-        String soundLocation = "src/Music/BackgroundSound.mp3";
-        media = new Media(new File(soundLocation).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0.7);
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer.seek(Duration.ZERO);
-            }
-        });
-        mediaPlayer.play();
+        try {
+            String soundLocation = "src/Music/BackgroundSound.mp3";
+            media = new Media(new File(soundLocation).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setVolume(0.7);
+            mediaPlayer.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayer.seek(Duration.ZERO);
+                }
+            });
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void playMenuMusic() {
-        // Tao Nhac nen
-        String soundLocation = "src/Music/TitleScreen.mp3";
-        media = new Media(new File(soundLocation).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        try {
+            String soundLocation = "src/Music/TitleScreen.mp3";
+            media = new Media(new File(soundLocation).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void startExplosion() {
-        AudioClip explosion = new AudioClip(Paths.get("src/Music/BombExplosion.wav").toUri().toString());
-        explosion.play();
+        try {
+            AudioClip explosion = new AudioClip(Paths.get("src/Music/BombExplosion.wav").toUri().toString());
+            explosion.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void moveUpDownSound() {
-        AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundUD.mp3").toUri().toString());
-        explosion.play();
+        try {
+            AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundUD.mp3").toUri().toString());
+            explosion.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void moveRightLeftSound() {
-        AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundLR.mp3").toUri().toString());
-        explosion.play();
+        try {
+            AudioClip explosion = new AudioClip(Paths.get("src/Music/SoundLR.mp3").toUri().toString());
+            explosion.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 
     public static void soundChristmas() {
-        String soundLocation = "src/Music/Christmas.mp3";
-        media = new Media(new File(soundLocation).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0.7);
-        mediaPlayer.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer.seek(Duration.ZERO);
-            }
-        });
-        mediaPlayer.play();
+        try {
+            String soundLocation = "src/Music/Christmas.mp3";
+            media = new Media(new File(soundLocation).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setVolume(0.7);
+            mediaPlayer.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayer.seek(Duration.ZERO);
+                }
+            });
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
     }
 }

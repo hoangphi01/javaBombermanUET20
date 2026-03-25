@@ -99,28 +99,28 @@ public class Update {
         }
         if (this.bomberman.size() > 0) {
             if (cnt == 0 * frameBomber) {
-                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                if ((this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map) || this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], 'b', this.map))) {
                     this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][0].getFxImage());
                 } else {
                     this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][0].getFxImage());
                 }
             }
             else if (cnt == 1 * frameBomber) {
-                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                if ((this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map) || this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], 'b', this.map))) {
                     this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][1].getFxImage());
                 } else {
                     this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][1].getFxImage());
                 }
             }
             else if (cnt == 2 * frameBomber) {
-                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                if ((this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map) || this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], 'b', this.map))) {
                     this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][2].getFxImage());
                 } else {
                     this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][2].getFxImage());
                 }
             }
             else if (cnt == 3 * frameBomber) {
-                if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+                if ((this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map) || this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], 'b', this.map))) {
                     this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][3].getFxImage());
                 } else {
                     this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][3].getFxImage());
@@ -128,7 +128,7 @@ public class Update {
             }
         }
         /*if (this.bomberman.size() > 0 && cnt >= 0 && cnt < 4) {
-            if (this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map)) {
+            if ((this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], ' ', this.map) || this.bomberman.get(0).check(d[dBomber][0], d[dBomber][1], 'b', this.map))) {
                 this.bomberman.get(0).update(d[dBomber][0], d[dBomber][1], Sprite.player[dBomber][cnt].getFxImage());
             } else {
                 this.bomberman.get(0).update(0, 0, Sprite.player[dBomber][cnt].getFxImage());
@@ -141,7 +141,7 @@ public class Update {
             updateBomb(bombs.get(0), timeBomb, posX, posY);
             timeBomb++;
         }
-        else if (timeBomb > 0 && timeBomb < 120) {
+        else if (timeBomb > 0 && timeBomb < 180) {
             //if (checkEvent == false && (abs(entities.get(0).getX() - posX) > Sprite.SCALED_SIZE || abs(entities.get(0).getY() - posY) > Sprite.SCALED_SIZE)) {
             if (checkEvent == false && (abs(this.bomberman.get(0).getX() - posX) > 20 || abs(this.bomberman.get(0).getY() - posY) > 20)) {
                 this.map.set(posX /40, posY / 40,'b');
@@ -187,7 +187,7 @@ public class Update {
             cntBombExplode++;
         }
 
-        if (timeBomb == 120) {
+        if (timeBomb == 180) {
             timeBomb = -1;
             cntBombExplode = 0;
             this.map.set(posX/40, posY/40, ' ');

@@ -70,9 +70,13 @@ public class BombermanGame extends Application {
     public static void startLevel1() {
         timer.stop();
         createMap();
-        levelStartSound = new MediaPlayer(new Media(new File("src/Music/StartLevel.mp3").toURI().toString()));
-        levelStartSound.setVolume(0.5);
-        levelStartSound.play();
+        try {
+            levelStartSound = new MediaPlayer(new Media(new File("src/Music/StartLevel.mp3").toURI().toString()));
+            levelStartSound.setVolume(0.5);
+            levelStartSound.play();
+        } catch (Exception e) {
+            System.err.println("Sound unavailable: " + e.getMessage());
+        }
         Image startLevel = new Image("/textures/level/STAGE1.png");
         ImageView imageView = new ImageView();
         imageView.setFitWidth(800);
