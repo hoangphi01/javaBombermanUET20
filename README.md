@@ -1,5 +1,10 @@
 # Bomberman UET20
 
+![Java](https://img.shields.io/badge/Java-11%2B-orange?logo=openjdk&logoColor=white)
+![JavaFX](https://img.shields.io/badge/JavaFX-OpenJFX-blue?logo=java&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 A classic Bomberman clone built with JavaFX. Originally developed as a UET (University of Engineering and Technology) OOP course project in 2020.
 
 ## Game Features
