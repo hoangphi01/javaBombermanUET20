@@ -22,12 +22,13 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static uet.oop.bomberman.GameConstants.*;
 
 public class BombermanGame extends Application {
-
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 13;
 
     private static final Group root = new Group();
     public static Map map = new Map();
@@ -79,8 +80,8 @@ public class BombermanGame extends Application {
         }
         Image startLevel = new Image("/textures/level/STAGE1.png");
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(800);
-        imageView.setFitHeight(520);
+        imageView.setFitWidth(CANVAS_WIDTH);
+        imageView.setFitHeight(CANVAS_HEIGHT);
         root.getChildren().add(imageView);
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(imageView.imageProperty(), startLevel)),
@@ -93,8 +94,8 @@ public class BombermanGame extends Application {
     public static void showOver() {
         Image endLevel = new Image("/textures/GAMEOVER.gif");
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(800);
-        imageView.setFitHeight(520);
+        imageView.setFitWidth(CANVAS_WIDTH);
+        imageView.setFitHeight(CANVAS_HEIGHT);
 //        root.getChildren().add(imageView);
 //        Timeline timeline = new Timeline(
 //                new KeyFrame(Duration.ZERO, new KeyValue(imageView.imageProperty(), endLevel)),
@@ -118,8 +119,8 @@ public class BombermanGame extends Application {
 
     public static void gameWin() {
         ImageView imageView = new ImageView(new Image("/textures/GAMEWIN.png"));
-        imageView.setFitWidth(800);
-        imageView.setFitHeight(520);
+        imageView.setFitWidth(CANVAS_WIDTH);
+        imageView.setFitHeight(CANVAS_HEIGHT);
 
         root.getChildren().add(imageView);
     }
@@ -153,8 +154,8 @@ public class BombermanGame extends Application {
     public static void loadTutorial() {
         //Image img;
         ImageView imageView = new ImageView(new Image("/textures/HOWTO.png"));
-        imageView.setFitWidth(800);
-        imageView.setFitHeight(520);
+        imageView.setFitWidth(CANVAS_WIDTH);
+        imageView.setFitHeight(CANVAS_HEIGHT);
 
         root.getChildren().remove(bg);
         //bg = null;
@@ -187,7 +188,7 @@ public class BombermanGame extends Application {
         gameSound.playMenuMusic();
 
         // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -208,100 +209,88 @@ public class BombermanGame extends Application {
 //        oneal.add(new Bomber(10, 7, Sprite.oneal_left[0].getFxImage()));
 //        oneal.add(new Bomber(2, 11, Sprite.oneal_left[0].getFxImage()));
 
+        // Key state tracking — register ONCE
+        Set<KeyCode> pressedKeys = new HashSet<>();
+        scene.setOnKeyPressed(e -> pressedKeys.add(e.getCode()));
+        scene.setOnKeyReleased(e -> pressedKeys.remove(e.getCode()));
+
         timer = new AnimationTimer() {
-            int cnt = -1;
-            int dBomber = 0;
-            int frameBomber = 5;
-            MovingEntity bomb = new Bomb();
+            int dBomber = DIR_DOWN;
+            boolean bombPressed = false;
+            long lastTime = 0;
+
             @Override
-            public void handle(long l) {
+            public void handle(long now) {
+                // Calculate delta time in milliseconds
+                long deltaMs = 0;
+                if (lastTime > 0) {
+                    deltaMs = (now - lastTime) / 1_000_000;
+                }
+                lastTime = now;
+                // Cap delta to prevent huge jumps (e.g. after window unfocus)
+                if (deltaMs > 100) deltaMs = 100;
+
                 render();
-                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, cnt, frameBomber, dBomber, bombs, map);
-                scene.setOnKeyPressed(e -> {
-                    if (!(cnt >= 0 && cnt < frameBomber * 3 + 1)) {
-                        if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
-                            cnt = 0;
-                            dBomber = 0;
-                            gameSound.moveUpDownSound();
-                        } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
-                            cnt = 0;
-                            dBomber = 1;
-                            gameSound.moveUpDownSound();
-                        } else if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
-                            cnt = 0;
-                            dBomber = 2;
-                            gameSound.moveUpDownSound();
-                        } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
-                            cnt = 0;
-                            dBomber = 3;
-                            gameSound.moveRightLeftSound();
-                        } else if (e.getCode() == KeyCode.SPACE && bombs.size() == 0) {
-                            bombs.add(new Bomb());
-                        }
+
+                // Determine direction from currently held keys
+                boolean isMoving = false;
+                if (pressedKeys.contains(KeyCode.UP) || pressedKeys.contains(KeyCode.W)) {
+                    dBomber = DIR_UP;
+                    isMoving = true;
+                } else if (pressedKeys.contains(KeyCode.DOWN) || pressedKeys.contains(KeyCode.S)) {
+                    dBomber = DIR_DOWN;
+                    isMoving = true;
+                } else if (pressedKeys.contains(KeyCode.RIGHT) || pressedKeys.contains(KeyCode.D)) {
+                    dBomber = DIR_RIGHT;
+                    isMoving = true;
+                } else if (pressedKeys.contains(KeyCode.LEFT) || pressedKeys.contains(KeyCode.A)) {
+                    dBomber = DIR_LEFT;
+                    isMoving = true;
+                }
+
+                // Bomb placement — only on initial press, not hold
+                if (pressedKeys.contains(KeyCode.SPACE)) {
+                    if (!bombPressed && bombs.size() == 0) {
+                        bombs.add(new Bomb());
                     }
-                });
-                if (cnt != -1)
-                    cnt++;
-                /*map = updates.getMap();
-                bomberman = updates.getBomberman();
-                balloom = updates.getBalloom();
-                oneal = updates.getOneal();
-                entities = updates.getEntities();
-                bombs = updates.getBombs();
-                hearts = updates.getHearts();
-                stuffObjects = updates.getStuffObjects();*/
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 3 * 40, 7 * 40, 20)) {
-                    frameBomber = 2;
-                    rspeedItem = new Flame();
-                    speedItem = new Flame();
+                    bombPressed = true;
+                } else {
+                    bombPressed = false;
                 }
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 12 * 40, 5 * 40, 20)) {
-                    rflameItem = new Flame();
-                    flameItem = new Flame();
+
+                updates.update(stuffObjects, hearts, entities, bomberman, balloom, oneal, dBomber, isMoving, bombs, map, deltaMs);
+
+                // Item pickups
+                if (bomberman.size() > 0) {
+                    int bx = bomberman.get(0).getX();
+                    int by = bomberman.get(0).getY();
+
+                    if (updates.collision(bx, by, 3 * BLOCK_WIDTH, 7 * BLOCK_HEIGHT, COLLISION_THRESHOLD)) {
+                        rspeedItem = new Flame();
+                        speedItem = new Flame();
+                    }
+                    if (updates.collision(bx, by, 12 * BLOCK_WIDTH, 5 * BLOCK_HEIGHT, COLLISION_THRESHOLD)) {
+                        rflameItem = new Flame();
+                        flameItem = new Flame();
+                    }
+                    if (updates.collision(bx, by, 17 * BLOCK_WIDTH, 11 * BLOCK_HEIGHT, COLLISION_THRESHOLD)) {
+                        rbombItem = new Flame();
+                        bombItem = new Flame();
+                    }
+
+                    // Win condition: all enemies dead + reach portal
+                    if (balloom.size() == 0 && oneal.size() == 0
+                            && updates.collision(bx, by, 6 * BLOCK_WIDTH, 10 * BLOCK_HEIGHT, COLLISION_THRESHOLD)) {
+                        this.stop();
+                        gameWin();
+                    }
                 }
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 17 * 40, 11 * 40, 20)) {
-                    rbombItem = new Flame();
-                    rbombItem = new Flame();
-                }
+
+                // Lose condition: no lives left
                 if (hearts.size() == 0) {
                     this.stop();
-                    //timer.stop();
                     showOver();
                 }
-                if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
-                    this.stop();
-                    gameWin();
-                }
-
-                /*map = updates.getMap();
-                bomberman = updates.getBomberman();
-                balloom = updates.getBalloom();
-                oneal = updates.getOneal();
-                entities = updates.getEntities();
-                bombs = updates.getBombs();
-                hearts = updates.getHearts();
-                stuffObjects = updates.getStuffObjects();*/
-
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 3 * 40, 7 * 40, 20)) {
-                    frameBomber = 2;
-                    rspeedItem = new Flame();
-                    speedItem = new Flame();
-                }
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 12 * 40, 5 * 40, 20)) {
-                    rflameItem = new Flame();
-                    flameItem = new Flame();
-                }
-                if (bomberman.size() > 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 17 * 40, 11 * 40, 20)) {
-                    rbombItem = new Flame();
-                    rbombItem = new Flame();
-                }
-                if (hearts.size() == 0) {
-                    this.stop();
-                }
-                if (bomberman.size() > 0 && balloom.size() == 0 && oneal.size() == 0 && updates.collision(bomberman.get(0).getX(), bomberman.get(0).getY(), 6 * 40, 10 * 40, 20)) {
-                    this.stop();
-                }
-
             }
         };
         timer.start();
@@ -318,22 +307,22 @@ public class BombermanGame extends Application {
         balloom.add(new Bomber(18, 2, Sprite.balloom_left[0].getFxImage()));
         oneal.add(new Bomber(10, 7, Sprite.oneal_left[0].getFxImage()));
         oneal.add(new Bomber(2, 11, Sprite.oneal_left[0].getFxImage()));
-        for (int i = 0; i < WIDTH; i++) {
+        for (int i = 0; i < MAP_WIDTH; i++) {
             for (int j = 0; j < 2; j++) {
                 stillObjects.add(new StaticEntity(i, j, Sprite.grass[20][15].getFxImage()));
             }
         }
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 2; j < HEIGHT; j++) {
-                if (j == 2 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1 || (i > 2 && i % 2 == 1 && j % 2 == 0 && i < 19 && j < 14)) {
+        for (int i = 0; i < MAP_WIDTH; i++) {
+            for (int j = 2; j < MAP_HEIGHT; j++) {
+                if (j == 2 || j == MAP_HEIGHT - 1 || i == 0 || i == MAP_WIDTH - 1 || (i > 2 && i % 2 == 1 && j % 2 == 0 && i < 19 && j < 14)) {
                     stillObjects.add(new StaticEntity(i, j, Sprite.wall.getFxImage()));
                 } else {
                     stillObjects.add(new StaticEntity(i, j, Sprite.grass[i - 1][j - 1].getFxImage()));
                 }
             }
         }
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < MAP_WIDTH; i++) {
+            for (int j = 0; j < MAP_HEIGHT; j++) {
                 if (map.get(i, j) == '*') {
                     stuffObjects.add(new Bomb(i, j, Sprite.brick[0].getFxImage()));
                 }

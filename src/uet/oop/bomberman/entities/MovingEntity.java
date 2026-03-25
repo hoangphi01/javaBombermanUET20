@@ -15,39 +15,36 @@ public abstract class MovingEntity extends Entity {
         this.y = yUnit * Sprite.SCALED_SIZE;
         this.img = img;
     }
+    private boolean isWalkable(char tile, char val) {
+        if (tile == val) return true;
+        // Bomb tiles are walkable like grass for the bomber
+        if (val == ' ' && tile == 'b') return true;
+        return false;
+    }
+
     public boolean check(int addX, int addY, char val, Map map)  {
         if (this.x % Sprite.SCALED_SIZE == 0 && this.y % Sprite.SCALED_SIZE == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1), val);
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1), val);
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE), val);
             }
             else {
-                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE), val);
             }
         }
         else if (this.x % Sprite.SCALED_SIZE != 0 && this.y % Sprite.SCALED_SIZE == 0) {
             if (addX == 0 && addY == 5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE + 1), val)
+                    && isWalkable(map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1), val);
             }
             else if (addX == 0 && addY == -5) {
-                if (map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE - 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE, this.y / Sprite.SCALED_SIZE - 1), val)
+                    && isWalkable(map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE - 1), val);
             }
             else {
                 return true;
@@ -61,14 +58,12 @@ public abstract class MovingEntity extends Entity {
                 return true;
             }
             else if (addX == 5 && addY == 0) {
-                if (map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE) == val && map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE), val)
+                    && isWalkable(map.get(this.x / Sprite.SCALED_SIZE + 1, this.y / Sprite.SCALED_SIZE + 1), val);
             }
             else {
-                if (map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE) == val && map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE + 1) == val)
-                    return true;
-                return false;
+                return isWalkable(map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE), val)
+                    && isWalkable(map.get(this.x / Sprite.SCALED_SIZE - 1, this.y / Sprite.SCALED_SIZE + 1), val);
             }
         }
         else {
